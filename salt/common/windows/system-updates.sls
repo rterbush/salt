@@ -1,5 +1,5 @@
 run_system_updates:
-  win_update.installed:
+  wua.uptodate:
     - categories:
       - 'Critical Updates'
       - 'Security Updates'
