@@ -12,4 +12,4 @@ minion_mine_update:
 # replicated in reactor
 minion_refresh_pillar:
   module.run:
-    - name: saltutil.refresh_pillare
+    - name: saltutil.refresh_pillar
