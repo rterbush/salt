@@ -1,5 +1,5 @@
 install_windows_updates:
-  win_update.installed:
+  wua.uptodate:
     - categories:
       - 'Critical Updates'
       - 'Security Updates'
@@ -11,7 +11,7 @@ set_execution_policy:
       set-executionpolicy bypass'
     - shell: powershell
     - require:
-      - win_update: install_windows_updates
+      - wua: install_windows_updates
 
 security-cis-17:
   cmd.script:
