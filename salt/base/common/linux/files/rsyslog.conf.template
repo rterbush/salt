@@ -1,0 +1,10 @@
+$ModLoad imuxsock
+
+$ModLoad imklog
+
+$FileCreateMode 0640
+
+$ActionForwardDefaultTemplate RSYSLOG_ForwardFormat
+
+# Provides TCP forwarding.
+*.* @@logcatcher.production.lhn:3514

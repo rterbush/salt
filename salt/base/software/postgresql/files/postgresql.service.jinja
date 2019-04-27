@@ -1,0 +1,5 @@
+{% set dbconf = salt['pillar.get']('postgresql_conf') -%}
+.include /lib/systemd/system/postgresql.service
+
+[Service]
+Environment=PGDATA={{ dbconf.homedir }}

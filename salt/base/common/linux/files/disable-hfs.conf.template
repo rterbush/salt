@@ -1,0 +1,2 @@
+blacklist hfs
+install hfs /bin/true

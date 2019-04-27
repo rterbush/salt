@@ -1,0 +1,2 @@
+blacklist freevxfs
+install freevxfs /bin/true

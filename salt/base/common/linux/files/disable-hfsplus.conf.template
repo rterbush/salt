@@ -1,0 +1,2 @@
+blacklist hfsplus 
+install hfsplus /bin/true

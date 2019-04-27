@@ -1,0 +1,3 @@
+Welcome to {{ grains['id'] }}!
+
+Make sure changes get pushed into the state repo!
