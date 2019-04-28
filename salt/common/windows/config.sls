@@ -22,3 +22,13 @@ set-time-server:
   cmd.script:
     - source: salt://common/windows/files/set-time-server.ps1
     - shell: powershell
+
+install_dotnet_features:
+  win_servermanager.installed:
+    - force: True
+    - name: Net-Framework-Core
+
+uninstall_essentials_experience:
+  win_servermanager.uninstalled:
+    - force: True
+    - name: ServerEssentialsRole
