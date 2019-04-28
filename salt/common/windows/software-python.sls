@@ -1,9 +1,5 @@
-python-pip:
-  pkg.installed
 
-pywinauto:
+pip_install_required:
   pip.installed:
-    - cwd: 'C:\salt\bin\scripts'
-    - bin_env: 'C:\salt\bin\scripts\pip.exe'
+    - requirements: salt://common/windows/files/python-requirements.txt
     - upgrade: True
-
