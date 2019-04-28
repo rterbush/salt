@@ -3,3 +3,5 @@ run_system_updates:
     - categories:
       - 'Critical Updates'
       - 'Security Updates'
+      - 'Definition Updates'
+      - 'Windows Defender'

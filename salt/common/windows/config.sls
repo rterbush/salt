@@ -3,6 +3,8 @@ install_windows_updates:
     - categories:
       - 'Critical Updates'
       - 'Security Updates'
+      - 'Windows Defender'
+      - 'Definition Updates'
       - 'Updates'
 
 set_execution_policy:
@@ -29,6 +31,5 @@ install_dotnet_features:
     - name: Net-Framework-Core
 
 uninstall_essentials_experience:
-  win_servermanager.uninstalled:
-    - force: True
+  win_servermanager.removed:
     - name: ServerEssentialsRole
