@@ -1,11 +1,10 @@
 install_windows_updates:
   wua.uptodate:
-    - categories:
-      - 'Critical Updates'
-      - 'Security Updates'
-      - 'Windows Defender'
-      - 'Definition Updates'
-      - 'Updates'
+    - software: True
+    - drivers: True
+    - skip_hidden: False
+    - skip_reboot: False
+    - skip_mandatory: False
 
 set_execution_policy:
   cmd.run:
@@ -25,9 +24,60 @@ set-time-server:
     - source: salt://common/windows/files/set-time-server.ps1
     - shell: powershell
 
+enable_rdp:
+  rdp.enabled
+
+set_private_network_policy:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles'
+    - vname: Category
+    - vtype: REG_DWORD
+    - vdata: 1
+
+disable_IE_prompts_1406:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3'
+    - vname: 1406
+    - vtype: REG_DWORD
+    - vdata: 0
+
+disable_IE_prompts_1601:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3'
+    - vname: 1601
+    - vtype: REG_DWORD
+    - vdata: 0
+
+disable_IE_enhanced_security_0:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components'
+    - vname: IsInstalled
+    - vtype: REG_DWORD
+    - vdata: 0
+
+disable_IE_enhanced_security_1:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components/{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}'
+    - vname: IsInstalled
+    - vtype: REG_DWORD
+    - vdata: 0
+
+disable_IE_enhanced_security_2:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Active Setup\Installed Components/{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}'
+    - vname: IsInstalled
+    - vtype: REG_DWORD
+    - vdata: 0
+
+force_machine_based_browser_security:
+  reg.present:
+    - name: 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\CurrentVersion\Internet Settings'
+    - vname: Security_HKLM_only
+    - vtype: REG_DWORD
+    - vdata: 1
+
 install_dotnet_features:
   win_servermanager.installed:
-    - force: True
     - name: Net-Framework-Core
 
 uninstall_essentials_experience:
