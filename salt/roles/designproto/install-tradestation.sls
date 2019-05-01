@@ -20,6 +20,7 @@ install_ts:
   cmd.script_retcode:
     - name: {{ bits.destdir}}/auto-install-tradestation.py
     - shell: python
+    - runas: TS
     - require:
       - file: upload_ts
 
