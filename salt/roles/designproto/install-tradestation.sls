@@ -17,12 +17,20 @@ upload_script:
     - makedirs: True
 
 install_ts:
-  cmd.script_retcode:
-    - name: {{ bits.destdir}}/auto-install-tradestation.py
-    - shell: python
-    - runas: TS
-    - require:
-      - file: upload_ts
+  module.run:
+    - task.create_task:
+      - name: install-task
+      - user_name: TS
+      - password: {{ pillar['userpass'] }}
+      - action_type: Execute
+      - cmd: 'psexec'
+      - arguments: '\\wnode1 -accepteula -nobanner -u WNODE1\TS -p {{ pillar['userpass'] }} -h -i 1 C:\salt\bin\python.exe {{ bits.destdir }}\auto-install-tradestation.py'
+      - trigger_enabled: True
+      - trigger_type: 'Once'
+      - force: True
+      - allow_demand_start: True
+      - require:
+        - file: upload_ts
 
 cleanup_ts:
   file.absent:

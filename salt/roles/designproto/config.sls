@@ -1,21 +1,21 @@
 create_win_logonscript:
-  - file.managed:
-    - name: C:\salt\bin\user-login.bat
-    - source: salt://{{ slspath }}/files/windows-login-script.txt
+  file.managed:
+    - name: C:/salt/bin/user-logon.bat
+    - source: salt://{{ slspath }}/files/windows-logon-script.txt
 
 set_winlogon_autoadminlogon:
   reg.present:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
     - vname: AutoAdminLogon
     - vtype: REG_SZ
-    - vdata: 1
+    - vdata: '1'
 
 set_winlogon_defaultdomainname:
   reg.present:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
     - vname: DefaultDomainName
     - vtype: REG_SZ
-    - vdata: 1
+    - vdata: {{ salt['grains.get']('host') | upper | regex_search('^(.*)\..*') }}
 
 set_winlogon_defaultusername:
   reg.present:
@@ -31,6 +31,13 @@ set_winlogon_defaultpassword:
     - vtype: REG_SZ
     - vdata: {{pillar['userpass']}}
 
+set_token_filter_policy:
+  reg.present:
+    - name: 'HLKM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+    - vname: LocalAccountTokenFilterPolicy
+    - vtype: REG_DWORD
+    - vdata: 1
+
 TS:
   user.present:
     - fullname: TradeStation User
@@ -38,5 +45,7 @@ TS:
     - groups:
       - Users
       - Power Users
+      - Administrators
     - win_homedrive: 'C:'
-    - win_logonscript: C:\salt\bin\user-login.bat
+    - win_logonscript: C:\salt\bin\user-logon.bat
+    - win_description: "Trade Analysis Account"
