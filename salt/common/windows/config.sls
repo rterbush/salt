@@ -1,3 +1,16 @@
+{%- load_yaml as bits%}
+uppernode: {{ salt['grains.get']('host') | upper | regex_search('^(\w+)\..*') }}
+hostname: {{ salt['grains.get']('host') }}
+{%- endload %}
+
+set_computer_name:
+  system.computer_name:
+    - name: {{ bits.uppernode }}
+
+set_computer_hostname:
+  system.hostname:
+    - name: {{ bits.hostname }}
+
 install_windows_updates:
   wua.uptodate:
     - software: True
@@ -16,12 +29,12 @@ set_execution_policy:
 
 security-cis-17:
   cmd.script:
-    - source: salt://common/windows/files/security-cis-17.ps1
+    - source: salt://{{ slspath }}/files/security-cis-17.ps1
     - shell: powershell
 
 set-time-server:
   cmd.script:
-    - source: salt://common/windows/files/set-time-server.ps1
+    - source: salt://{{ sls path }}/files/set-time-server.ps1
     - shell: powershell
 
 enable_rdp:
