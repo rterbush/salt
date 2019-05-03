@@ -2,12 +2,14 @@
 
 install_choco:
   module.run:
-    - name: chocolatey.bootstrap
+    - chocolatey.bootstrap
 
 install_flauinspect:
   chocolatey.installed:
     - name: flauinspect
 
-
+install_sysinternals:
+  chocolatey.installed:
+    - name: sysinternals
 
 
