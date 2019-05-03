@@ -34,24 +34,12 @@ security-cis-17:
 
 set-time-server:
   cmd.script:
-    - source: salt://{{ slspath }}/files/set-time-server.ps1
+    - source: salt://{{ slspath }}/files/set-time-server.ps1.jinja
     - shell: powershell
+    - template: jinja
 
 enable_rdp:
   rdp.enabled
-
-install_remote_management_tools:
-  cmd.script:
-    - source: salt://{{ slspath }}/files/install-rsat.ps1
-    - shell: powershell
-
-install_dotnet_features:
-  win_servermanager.installed:
-    - name: Net-Framework-Core
-
-uninstall_essentials_experience:
-  win_servermanager.removed:
-    - name: ServerEssentialsRole
 
 set_private_network_policy:
   reg.present:
