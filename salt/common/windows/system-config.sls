@@ -1,6 +1,6 @@
 {%- load_yaml as bits%}
-uppernode: {{ salt['grains.get']('host') | upper | regex_search('^(.*)\..*') }}
-hostname: {{ salt['grains.get']('host') }}
+uppernode: {{ salt['grains.get']('id') | upper | regex_search('^(.*)\..*') }}
+hostname: {{ salt['grains.get']('id') }}
 {%- endload %}
 
 set_computer_name:
@@ -29,6 +29,7 @@ set_execution_policy:
 
 set-time-server:
   cmd.script:
+    - name: set-time-server.ps1
     - source: salt://{{ slspath }}/files/set-time-server.ps1.jinja
     - shell: powershell
     - template: jinja
@@ -49,7 +50,7 @@ disable_IE_prompts_1406:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3'
     - vname: 1406
     - vtype: REG_DWORD
-    - vdata: 0
+    - vdata: '0'
     - win_owner: Administrators
 
 disable_IE_prompts_1601:
@@ -57,7 +58,7 @@ disable_IE_prompts_1601:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3'
     - vname: 1601
     - vtype: REG_DWORD
-    - vdata: 0
+    - vdata: '0'
     - win_owner: Administrators
 
 disable_IE_enhanced_security_0:
