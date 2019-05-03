@@ -34,7 +34,7 @@ security-cis-17:
 
 set-time-server:
   cmd.script:
-    - source: salt://{{ sls path }}/files/set-time-server.ps1
+    - source: salt://{{ slspath }}/files/set-time-server.ps1
     - shell: powershell
 
 enable_rdp:
