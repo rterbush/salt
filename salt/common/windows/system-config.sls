@@ -1,5 +1,5 @@
 {%- load_yaml as bits%}
-uppernode: {{ salt['grains.get']('host') | upper | regex_search('^(\w+)\..*') }}
+uppernode: {{ salt['grains.get']('host') | upper | regex_search('^(.*)\..*') }}
 hostname: {{ salt['grains.get']('host') }}
 {%- endload %}
 
