@@ -1,15 +1,6 @@
-{%- load_yaml as bits%}
-uppernode: {{ salt['grains.get']('id') | upper | regex_search('^(\w+)\..*') }}
-hostname: {{ salt['grains.get']('id') }}
-{%- endload %}
-
-set_computer_name:
-  system.computer_name:
-    - name: {{ bits.uppernode }}
-
 set_computer_hostname:
   system.hostname:
-    - name: {{ bits.hostname }}
+    - name: {{ salt['grains.get']('id') }}
 
 install_windows_updates:
   wua.uptodate:
@@ -47,6 +38,7 @@ set_private_network_policy:
 disable_IE_prompts_1406:
   reg.present:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3'
+    - use_32bit_registry: True
     - vname: 1406
     - vtype: REG_DWORD
     - vdata: 0
@@ -55,6 +47,7 @@ disable_IE_prompts_1406:
 disable_IE_prompts_1601:
   reg.present:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3'
+    - use_32bit_registry: True
     - vname: 1601
     - vtype: REG_DWORD
     - vdata: 0
