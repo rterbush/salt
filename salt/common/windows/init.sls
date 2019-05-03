@@ -1,7 +1,7 @@
 include:
   - {{ slspath }}.system-config
-  - {{ slspath }}.system-software
   - {{ slspath }}.reboot-if-required
+  - {{ slspath }}.system-software
   - {{ slspath }}.software-addons
   - {{ slspath }}.software-python
 
