@@ -2,7 +2,7 @@
 
 install_choco:
   module.run:
-    - chocolatey.bootstrap
+    - chocolatey.bootstrap: []
 
 install_flauinspect:
   chocolatey.installed:
