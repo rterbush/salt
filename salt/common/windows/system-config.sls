@@ -27,11 +27,6 @@ set_execution_policy:
     - require:
       - wua: install_windows_updates
 
-security-cis-17:
-  cmd.script:
-    - source: salt://{{ slspath }}/files/security-cis-17.ps1
-    - shell: powershell
-
 set-time-server:
   cmd.script:
     - source: salt://{{ slspath }}/files/set-time-server.ps1.jinja
