@@ -1,16 +1,18 @@
+{% set hostname,domain = grains.id.partition('.')[::2] %}
 {%- load_yaml as bits %}
-nodename: {{ salt['grains.get']('id') }}
+nodename: {{ grains.id }}
+uppernode: {{ hostname | upper }}
 {%- endload %}
 
 set_computer_name:
   module.run:
     - system.set_computer_name:
-      - name: {{ bits.nodename | regex_match ('^(\w+)\..*$') | upper }}
+      - name: {{ bits.uppernode }}
 
 set_computer_hostname:
   module.run:
-    - system.hostname:
-      - name: {{ bits.nodename }}
+    - system.set_hostname:
+      - hostname: {{ bits.nodename }}
 
 install_windows_updates:
   wua.uptodate:
