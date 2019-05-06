@@ -1,6 +1,16 @@
+{%- load_yaml as bits %}
+nodename: {{ salt['grains.get']('id') }}
+{%- endload %}
+
+set_computer_name:
+  module.run:
+    - system.set_computer_name:
+      - name: {{ bits.nodename | regex_match ('^(\w+)\..*$') | upper }}
+
 set_computer_hostname:
-  system.hostname:
-    - name: {{ salt['grains.get']('id') }}
+  module.run:
+    - system.hostname:
+      - name: {{ bits.nodename }}
 
 install_windows_updates:
   wua.uptodate:

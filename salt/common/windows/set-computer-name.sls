@@ -5,9 +5,7 @@ import re
 def run():
   config = {}
 
-  trtable = str.maketrans('.','-')
-
-  upname = re.split('^(\w+\.\w+\.\w+)\..*', __grains__['id'])[0].translate(trtable).upper()
+  upname = re.match('^(\w+)\..*', __grains__['id'])[1].upper()
 
   config['set_computer_name'] = {
     'module.run': [
