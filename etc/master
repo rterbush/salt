@@ -769,7 +769,7 @@ fileserver_backend:
 # order), and the first one with a compatible version installed will be the
 # provider that is used.
 #
-#gitfs_provider: pygit2
+gitfs_provider: gitpython
 
 # Along with gitfs_password, is used to authenticate to HTTPS remotes.
 # gitfs_user: ''
@@ -843,10 +843,7 @@ fileserver_backend:
 #  - cmd_yaml: cat /etc/salt/yaml
 ext_pillar:
   - git:
-    - master git clone git@bitbucket.org:rterbush/salt-bcm-pillar.git
-      - root: ''
-      - privkey: /root/.ssh/salt-bcm-pillar
-      - pubkey: /root/.ssh/salt-bcm-pillar.pub
+    - master git@bitbucket.org:rterbush/salt-bcm-pillar.git
 
 # A list of paths to be recursively decrypted during pillar compilation.
 # Entries in this list can be formatted either as a simple string, or as a
@@ -926,7 +923,7 @@ ext_pillar:
 # gitpython. If unset, then both will be tried in that same order, and the
 # first one with a compatible version installed will be the provider that
 # is used.
-#git_pillar_provider: pygit2
+git_pillar_provider: gitpython
 
 # If the desired branch matches this value, and the environment is omitted
 # from the git_pillar configuration, then the environment for that git_pillar
