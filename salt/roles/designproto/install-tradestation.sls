@@ -11,13 +11,15 @@ upload_ts:
     - source: {{ bits.srcdir }}/{{ bits.tsbin }}
     - makedirs: True
 
-upload_script:
+upload_install_script:
   file.managed:
     - name: {{ bits.destdir }}/auto-install-tradestation.py
     - source: {{ bits.srcdir }}/auto-install-tradestation.py
     - makedirs: True
+    - require:
+      - file: upload_ts
 
-install_ts:
+create_install_task:
   module.run:
     - task.create_task:
       - name: install-task
@@ -31,7 +33,7 @@ install_ts:
       - force: True
       - allow_demand_start: True
       - require:
-        - file: upload_ts
+        - file: upload_install_script
 
 run_install_task:
   module.run:
@@ -53,4 +55,4 @@ cleanup_script:
   file.absent:
     - name: {{ bits.destdir }}/auto-install-tradestation.py
     - require:
-      - cmd: install_ts
+      - run: run_install_task
