@@ -15,7 +15,7 @@ set_winlogon_defaultdomainname:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
     - vname: DefaultDomainName
     - vtype: REG_SZ
-    - vdata: {{ salt['grains.get']('host') | upper | regex_search('^(.*)\..*') }}
+    - vdata: {{ salt['grains.get']('id') | regex_search('^(\W+)\..*') | upper }}
 
 set_winlogon_defaultusername:
   reg.present:
@@ -33,7 +33,7 @@ set_winlogon_defaultpassword:
 
 set_token_filter_policy:
   reg.present:
-    - name: 'HLKM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+    - name: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
     - vname: LocalAccountTokenFilterPolicy
     - vtype: REG_DWORD
     - vdata: 1

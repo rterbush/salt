@@ -2,6 +2,7 @@
 destdir: 'C:/temp'
 tsbin: 'TradeStation 9.5 Setup.exe'
 srcdir: 'salt://roles/designproto/files'
+uppernode: {{ salt['grains.get']('id') | regex_search ('^(\W+)\..*') | upper }}
 {%- endload %}
 
 upload_ts:
@@ -24,7 +25,7 @@ install_ts:
       - password: {{ pillar['userpass'] }}
       - action_type: Execute
       - cmd: 'psexec'
-      - arguments: '\\wnode1 -accepteula -nobanner -u WNODE1\TS -p {{ pillar['userpass'] }} -h -i 1 C:\salt\bin\python.exe {{ bits.destdir }}\auto-install-tradestation.py'
+      - arguments: '\\{{ bits.uppernode }} -accepteula -nobanner -u {{ bits.uppernode }}\TS -p {{ pillar['userpass'] }} -h -i 1 C:\salt\bin\python.exe {{ bits.destdir }}\auto-install-tradestation.py'
       - trigger_enabled: True
       - trigger_type: 'Once'
       - force: True
@@ -34,7 +35,7 @@ install_ts:
 
 cleanup_ts:
   file.absent:
-    - name: {{ bits.destdir }}/{{ bits.tsbin}}
+    - name: {{ bits.destdir }}/{{ bits.tsbin }}
     - require:
       - cmd: install_ts
 
