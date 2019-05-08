@@ -17,3 +17,10 @@ remove_tradestation_registry_key3:
 remove_tradestation_registry_key4:
   reg.key_absent:
     - name: HKCU\SOFTWARE\TradeStation Technologies
+
+reboot_before_install:
+  system.reboot:
+    - only_on_pending_reboot: False
+    - force_close: True
+    - timeout: 10
+    - in_seconds: True
