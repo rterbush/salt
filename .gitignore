@@ -1,2 +1,9 @@
 *.exe
 *.pyc
+*.swp
+etc/minion_id
+etc/minion.d/_*
+etc/pki
+etc/.ssh/*.pem
+etc/.ssh/*.pub
+etc/ssh/salt-provisioning
