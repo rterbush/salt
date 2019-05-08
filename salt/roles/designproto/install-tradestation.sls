@@ -2,7 +2,7 @@
 destdir: 'C:/temp'
 tsbin: 'TradeStation 9.5 Setup.exe'
 srcdir: 'salt://roles/designproto/files'
-uppernode: {{ salt['grains.get']('id') | regex_search ('^(\W+)\..*') | upper }}
+uppernode: {{ salt['grains.get']('id') | regex_search ('^(.*)\..*') | upper }}
 {%- endload %}
 
 upload_ts:

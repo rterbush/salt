@@ -15,7 +15,7 @@ set_winlogon_defaultdomainname:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
     - vname: DefaultDomainName
     - vtype: REG_SZ
-    - vdata: {{ salt['grains.get']('id') | regex_search('^(\W+)\..*') | upper }}
+    - vdata: {{ salt['grains.get']('id') | regex_search('^(.*)\..*') | upper }}
 
 set_winlogon_defaultusername:
   reg.present:
