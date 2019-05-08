@@ -1,8 +1,8 @@
-{%- load_yaml as bits%}
+{%- load_yaml as bits %}
 destdir: 'C:/temp'
 tsbin: 'TradeStation 9.5 Setup.exe'
 srcdir: 'salt://roles/designproto/files'
-uppernode: {{ salt['grains.get']('id') | regex_search ('^(.*)\..*') | upper }}
+uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
 
 upload_ts:
@@ -32,6 +32,16 @@ install_ts:
       - allow_demand_start: True
       - require:
         - file: upload_ts
+
+run_install_task:
+  module.run:
+    - task.run_wait:
+      - name: install-task
+
+delete_install_task:
+  module.run:
+    - task.delete_task:
+      - name: install-task
 
 cleanup_ts:
   file.absent:
