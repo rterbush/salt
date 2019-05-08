@@ -107,8 +107,8 @@ disable_UAC:
 
 'C:\salt\bin\Scripts':
   win_path.exists:
-    - index: 0
+    - index: 1
 
 'C:\salt\bin':
   win_path.exists:
-    - index: 0
+    - index: 1
