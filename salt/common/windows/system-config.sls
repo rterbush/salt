@@ -105,3 +105,10 @@ disable_UAC:
     - vdata: 0
     - win_owner: Administrators
 
+'C:\salt\bin\Scripts':
+  win_path.exists:
+    - index: 0
+
+'C:\salt\bin':
+  win_path.exists:
+    - index: 0
