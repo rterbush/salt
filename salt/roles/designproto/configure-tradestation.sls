@@ -6,9 +6,13 @@ uppernode: {{ grains['id'].split('.') | first | upper }}
 
 upload_config_script:
   file.managed:
-    - name: {{ bits.destdir }}/auto-install-tradestation.py
-    - source: {{ bits.srcdir }}/auto-install-tradestation.py
+    - name: {{ bits.destdir }}/auto-configure-tradestation.py
+    - source: {{ bits.srcdir }}/auto-configure-tradestation.py
+    - template: jinja
     - makedirs: True
+    - defaults:
+        tsuser: {{ pillar['tsusername'] }}
+        tspass: {{ pillar['tspassword'] }}
 
 create_config_task:
   module.run:
