@@ -18,7 +18,7 @@ clone_framework_repo:
   git.latest:
     - name: git@bitbucket.org:signalbuilders/tradestation-framework.git
     - target: 'C:\Users\TS\Framework'
-    - identity: /root/.ssh/id_rsa
+    - identity: salt://{{ slspath }}/files/wnode-ssh-key
     - user: TS
     - password: {{ pillar['userpass'] }}
 
