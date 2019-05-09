@@ -14,6 +14,14 @@ upload_config_script:
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
 
+clone_framework_repo:
+  git.latest:
+    - name: git@bitbucket.org:signalbuilders/tradestation-framework.git
+    - target: 'C:\Users\TS\Framework'
+    - identity: /root/.ssh/id_rsa
+    - user: TS
+    - password: {{ pillar['userpass'] }}
+
 create_config_task:
   module.run:
     - task.create_task:
