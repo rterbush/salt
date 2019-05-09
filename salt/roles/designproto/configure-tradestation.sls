@@ -33,7 +33,7 @@ create_known_hosts:
 
 create_repo_target:
   file.directory:
-    - name: 'C:\Users\TS\Framework'
+    - name: 'C:\Users\TS\framework'
     - win_owner: TS
     - win_perms:
       TS:
@@ -44,8 +44,15 @@ clone_framework_repo:
   git.latest:
     - name: git@bitbucket.org:signalbuilders/tradestation-framework.git
     - rev: master
-    - target: 'C:\Users\TS\Framework'
-    - identity: 'C:\Users\TS\_ssh\wnode-ssh-key'
+    - branch: master
+    - force_checkout: True
+    - update_head: False
+    - force_reset: True
+    - fetch_tags: False
+    - sync_tags: False
+    - depth: 1
+    - target: 'C:\Users\TS\framework'
+    - identity: 'C:\Users\TS\.ssh\wnode-ssh-key'
     - user: TS
     - password: {{ pillar['userpass'] }}
 
