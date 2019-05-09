@@ -12,4 +12,8 @@ install_sysinternals:
   chocolatey.installed:
     - name: sysinternals
 
+install_git:
+  chocolatey.installed:
+    - name: git.install
+    - install_args: '-- params "/WindowsTerminal /SChannel"'
 
