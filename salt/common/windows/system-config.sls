@@ -112,3 +112,11 @@ disable_UAC:
 'C:\salt\bin':
   win_path.exists:
     - index: 1
+
+'C:\Program Files\Git\usr\bin':
+  win_path.exists:
+    - index: 1
+
+'C:\Program Files\Git\bin':
+  win_path.exists:
+    - index: 1

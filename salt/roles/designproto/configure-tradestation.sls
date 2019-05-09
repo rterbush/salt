@@ -14,11 +14,40 @@ upload_config_script:
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
 
+create_wnode_ssh_public_key:
+  file.managed:
+    - name: 'C:\Users\TS\_ssh\wnode-ssh-key.pub'
+    - source: salt://{{ slspath }}/files/wnode-ssh-key.pub
+    - makedirs: True
+
+create_wnode_ssh_private_key:
+  file.managed:
+    - name: 'C:\Users\TS\_ssh\wnode-ssh-key'
+    - source: salt://{{ slspath }}/files/wnode-ssh-key
+    - makedirs: True
+
+create_known_hosts:
+  ssh_known_hosts:
+    - present:
+    - user: TS
+    - fingerprint: 97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40
+    - fingerprint_hash_type: md5
+
+create_repo_target:
+  file.directory:
+    - name: 'C:\Users\TS\Framework'
+    - win_owner: TS
+    - win_perms:
+      TS:
+        perms: full_control
+    - win_inheritance: True
+
 clone_framework_repo:
   git.latest:
     - name: git@bitbucket.org:signalbuilders/tradestation-framework.git
+    - rev: master
     - target: 'C:\Users\TS\Framework'
-    - identity: salt://{{ slspath }}/files/wnode-ssh-key
+    - identity: 'C:\Users\TS\_ssh\wnode-ssh-key'
     - user: TS
     - password: {{ pillar['userpass'] }}
 
