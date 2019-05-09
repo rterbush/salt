@@ -16,22 +16,20 @@ upload_config_script:
 
 create_wnode_ssh_public_key:
   file.managed:
-    - name: 'C:\Users\TS\_ssh\wnode-ssh-key.pub'
+    - name: 'C:\Users\TS\.ssh\wnode-ssh-key.pub'
     - source: salt://{{ slspath }}/files/wnode-ssh-key.pub
     - makedirs: True
 
 create_wnode_ssh_private_key:
   file.managed:
-    - name: 'C:\Users\TS\_ssh\wnode-ssh-key'
+    - name: 'C:\Users\TS\.ssh\wnode-ssh-key'
     - source: salt://{{ slspath }}/files/wnode-ssh-key
     - makedirs: True
 
 create_known_hosts:
-  ssh_known_hosts:
-    - present:
-    - user: TS
-    - fingerprint: 97:8c:1b:f2:6f:14:6b:5c:3b:ec:aa:46:46:74:7c:40
-    - fingerprint_hash_type: md5
+  file.managed:
+    - name: 'C:\Users\TS\.ssh\known_hosts'
+    - source: salt://{{ slspath }}/files/known_hosts.bitbucket.org
 
 create_repo_target:
   file.directory:
