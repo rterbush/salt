@@ -11,6 +11,8 @@ upload_config_script:
     - template: jinja
     - makedirs: True
     - defaults:
+        sharedrive: {{ pillar['sharedrive'] }}
+        datadir: {{ pillar['datadir'] }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
 
@@ -30,31 +32,6 @@ create_known_hosts:
   file.managed:
     - name: 'C:\Users\TS\.ssh\known_hosts'
     - source: salt://{{ slspath }}/files/known_hosts.bitbucket.org
-
-create_repo_target:
-  file.directory:
-    - name: 'C:\Users\TS\framework'
-    - win_owner: TS
-    - win_perms:
-      TS:
-        perms: full_control
-    - win_inheritance: True
-
-clone_framework_repo:
-  git.latest:
-    - name: git@bitbucket.org:signalbuilders/tradestation-framework.git
-    - rev: master
-    - branch: master
-    - force_checkout: True
-    - update_head: False
-    - force_reset: True
-    - fetch_tags: False
-    - sync_tags: False
-    - depth: 1
-    - target: 'C:\Users\TS\framework'
-    - identity: 'C:\Users\TS\.ssh\wnode-ssh-key'
-    - user: TS
-    - password: {{ pillar['userpass'] }}
 
 create_config_task:
   module.run:

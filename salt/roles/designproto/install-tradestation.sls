@@ -1,7 +1,7 @@
 {%- load_yaml as bits %}
 destdir: 'C:/temp'
 tsbin: 'TradeStation 9.5 Setup.exe'
-srcdir: 'salt://roles/designproto/files'
+srcdir: '{{ pillar['sharedrive'] }}:{{ pillar['datadir'] }}'
 uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
 
