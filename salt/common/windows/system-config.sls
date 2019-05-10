@@ -124,6 +124,6 @@ disable_UAC:
 create_network_drive:
   cmd.run:
     - name: '
-      New-PSDrive -Name "{{ pillar['sharedrive'] }}" -PSProvider FileSystem -Root "{{ pillar['fileshare'] }}'
+      New-PSDrive -Name "{{ pillar['sharedrive'] }}" -PSProvider FileSystem -Root "{{ pillar['fileshare'] }}" -Persist'
     - shell: powershell
 
