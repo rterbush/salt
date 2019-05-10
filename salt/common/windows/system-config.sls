@@ -45,7 +45,7 @@ set_private_network_policy:
     - vname: Category
     - vtype: REG_DWORD
     - vdata: 1
-    - win_owner: Administrators
+    - win_owner: Administrator
 
 disable_IE_prompts_1406:
   reg.present:
@@ -71,7 +71,7 @@ disable_IE_enhanced_security_0:
     - vname: IsInstalled
     - vtype: REG_DWORD
     - vdata: 0
-    - win_owner: Administrators
+    - win_owner: Administrator
 
 disable_IE_enhanced_security_1:
   reg.present:
@@ -87,7 +87,7 @@ disable_IE_enhanced_security_2:
     - vname: IsInstalled
     - vtype: REG_DWORD
     - vdata: 0
-    - win_owner: Administrators
+    - win_owner: Administrator
 
 force_machine_based_browser_security:
   reg.present:
@@ -95,7 +95,7 @@ force_machine_based_browser_security:
     - vname: Security_HKLM_only
     - vtype: REG_DWORD
     - vdata: 1
-    - win_owner: Administrators
+    - win_owner: Administrator
 
 disable_UAC:
   reg.present:
@@ -103,7 +103,16 @@ disable_UAC:
     - vname: EnableLUA
     - vtype: REG_DWORD
     - vdata: 0
-    - win_owner: Administrators
+    - win_owner: Administrator
+
+# enables ability for File Explorer to display mapped drives
+enable_linked_connections:
+  reg.present:
+    - name: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
+    - vname: EnableLinkedConnections
+    - vtype: REG_DWORD
+    - vdata: 1
+    - win_owner: Administrator
 
 'C:\salt\bin\Scripts':
   win_path.exists:

@@ -34,7 +34,7 @@ set_winlogon_defaultpassword:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
     - vname: DefaultPassword
     - vtype: REG_SZ
-    - vdata: {{pillar['userpass']}}
+    - vdata: {{ pillar['userpass'] }}
 
 set_token_filter_policy:
   reg.present:

@@ -4,4 +4,4 @@ for /f "skip=1 tokens=3 usebackq" %%s in (
   %windir%\System32\tscon.exe %%s /dest:console
 )
 
-net user {{ sharedrive }}: {{ fileshare }} TS {{ userpass }}
+net use {{ sharedrive }}: {{ fileshare }} /u:TS {{ userpass }}
