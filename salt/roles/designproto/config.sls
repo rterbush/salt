@@ -2,6 +2,11 @@ create_win_logonscript:
   file.managed:
     - name: C:/salt/bin/user-logon.bat
     - source: salt://{{ slspath }}/files/windows-logon-script.txt
+    - template: jinja
+    - defaults:
+        sharedrive: {{ pillar['sharedrive'] }}
+        fileshare: {{ pillar['fileshare'] }}
+        userpass: {{ pillar['userpass' ] }}
 
 set_winlogon_autoadminlogon:
   reg.present:

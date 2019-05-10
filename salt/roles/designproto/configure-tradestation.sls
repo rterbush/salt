@@ -28,11 +28,6 @@ create_wnode_ssh_private_key:
     - source: salt://{{ slspath }}/files/wnode-ssh-key
     - makedirs: True
 
-create_known_hosts:
-  file.managed:
-    - name: 'C:\Users\TS\.ssh\known_hosts'
-    - source: salt://{{ slspath }}/files/known_hosts.bitbucket.org
-
 create_config_task:
   module.run:
     - task.create_task:
