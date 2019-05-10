@@ -120,3 +120,10 @@ disable_UAC:
 'C:\Program Files\Git\bin':
   win_path.exists:
     - index: 1
+
+create_network_drive:
+  cmd.run:
+    - name: '
+      New-PSDrive -Name "{{ pillar['sharedrive'] }}" -PSProvider FileSystem -Root "{{ pillar['fileshare'] }}'
+    - shell: powershell
+
