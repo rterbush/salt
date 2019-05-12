@@ -18,6 +18,6 @@ dead_service_postfix:
   service.dead:
     - name: postfix
 
-dead_service_auditd:
-  service.dead:
-    - name: auditd.service
+nfsd:
+  service.running:
+    - enable: True
