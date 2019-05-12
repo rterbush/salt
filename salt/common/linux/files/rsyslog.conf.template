@@ -7,4 +7,4 @@ $FileCreateMode 0640
 $ActionForwardDefaultTemplate RSYSLOG_ForwardFormat
 
 # Provides TCP forwarding.
-*.* @@logcatcher.production.lhn:3514
+*.* @@{{ syslogserver }}:3514

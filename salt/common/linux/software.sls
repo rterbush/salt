@@ -11,6 +11,7 @@ required_software:
       - yum-plugin-versionlock
       - deltarpm
       - bind-utils
+      - nfs-utils
       - lvm2
       - bzip2
       - gcc
@@ -37,24 +38,9 @@ required_software:
       - curl
       - ssmtp
       - mailx
-{% if grains['os'] == 'Amazon' %}
-      - python27-psutil
-      - python27-pip
-      - python27-devel
-      - python27-boto
-      - python27-boto3
-      - python27-pyOpenSSL
-{% else %}
       - chrony
       - libndp
       - openssl-libs
-      - python2-psutil
-      - python-devel
-      - python2-pip
-      - python2-boto
-      - python2-boto3
-      - pyOpenSSL
-{% endif %}
 
 purge_packages:
   pkg.purged:
@@ -70,6 +56,9 @@ install_ntpd_config:
     - mode: 644
     - replace: True
     - create: True
+    - template: jinja
+    - defaults:
+        ntpserver: {{ pillar['ntpserver'] }}
 
 ntpd:
   service.running:

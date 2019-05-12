@@ -39,10 +39,3 @@ include /etc/logrotate.d
     rotate 1
 }
 
-/var/log/kibana/kibana.stdout {
-    rotate 6
-    daily
-    postrotate
-    /usr/bin/killall -HUP syslogd
-    endscript
-}
