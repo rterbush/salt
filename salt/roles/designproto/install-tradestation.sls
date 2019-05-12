@@ -1,7 +1,7 @@
 {%- load_yaml as bits %}
 destdir: 'C:/temp'
 tsbin: 'TradeStation 9.5 Setup.exe'
-srcdir: '{{ pillar['sharedrive'] }}:{{ pillar['datadir'] }}'
+srcdir: '{{ pillar['sharedrive'] }}:/{{ pillar['datadir'] }}/Applications/'
 uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
 
