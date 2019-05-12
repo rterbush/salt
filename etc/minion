@@ -6,6 +6,9 @@
 # not be set in the config. If there is no blank line after the comment, the
 # value is presented as an example and is not the default.
 
+use_superseded:
+  - module.run
+
 # Per default the minion will automatically include all config files
 # from minion.d/*.conf (minion.d is a directory in the same directory
 # as the main minion config file).
