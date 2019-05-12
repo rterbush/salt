@@ -105,6 +105,20 @@ enable_linked_connections:
     - vtype: REG_DWORD
     - vdata: 1
 
+disable_server_manager_0:
+  reg.present:
+    - name: 'HKLM\SOFTWARE\Microsoft\ServerManager'
+    - vname: DoNotOpenServerManagerAtLogon
+    - vtype: REG_DWORD
+    - vdata: 1
+
+disable_server_manager_1:
+  reg.present:
+    - name: 'HKLM\Software\Microsoft\ServerManager'
+    - vname: CheckedUnattendLaunchSetting
+    - vtype: REG_DWORD
+    - vdata: 0
+
 'C:\salt\bin\Scripts':
   win_path.exists:
     - index: 1
