@@ -1,14 +1,13 @@
 {%- load_yaml as bits %}
-destdir: 'C:\temp'
+destdir: C:\\temp
 tsbin: 'TradeStation 9.5 Setup.exe'
-srcdir: '{{ pillar['sharedrive'] }}:\SystemDevelopment\Applications'
 uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
 
 upload_ts:
   file.managed:
     - name: {{ bits.destdir }}\{{ bits.tsbin }}
-    - source: salt://files/{{ bits.tsbin }}
+    - source: salt://files/Applications/{{ bits.tsbin }}
     - makedirs: True
 
 upload_install_script:
