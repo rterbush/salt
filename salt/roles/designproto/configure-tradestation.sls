@@ -11,10 +11,15 @@ upload_config_script:
     - template: jinja
     - makedirs: True
     - defaults:
-        sharedrive: {{ pillar['sharedrive'] }}
-        datadir: {{ pillar['datadir'] }}
+        destdir: {{ bits.destdir }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
+
+upload_smart_code_framework:
+  file.managed:
+    - name: {{ bits.destdir }}\000-BOS-SMART-CODE-V1.9.ELD
+    - source: salt://files/TradeStation/ELD/000-BOS-SMART-CODE-V1.9.ELD
+    - makedirs: True
 
 create_config_task:
   module.run:

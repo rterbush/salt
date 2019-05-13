@@ -5,7 +5,7 @@ from pywinauto.timings import Timings
 Timings.slow()
 Timings.window_find_timeout = 120
 
-strategies = '{{ sharedrive }}:\\{{ datadir }}\\TradeStation\\ELD\\000-BOS-SMART-CODE-V1.9.ELD'
+strategies = '{{ destdir }}\\000-BOS-SMART-CODE-V1.9.ELD'
 
 def launch_ts():
     app = Desktop(backend="uia").window(title_re="TradeStation.*")
@@ -14,11 +14,7 @@ def launch_ts():
         app.wait('visible')
         app.UserNameEdit.set_edit_text('{{ tsuser }}')
         app.PasswordEdit.set_edit_text('{{ tspass }}')
-        app.Button2.click()             # Simulated Trading
-
-        # Need to start Online this first time in Simulated mode
-        #if not app.RadioButton2.get_toggle_state():
-        #    app.RadioButton2.toggle()
+        app.Button2.click()                 # Simulated Trading
 
         app.Main.wait('visible')
 
@@ -28,12 +24,13 @@ def launch_ts():
 if __name__ == "__main__":
 
     app = launch_ts()
-    app.MenuBar.type_keys('%FM')                                # Open Import Dialog
-    app.Dialog.ListBox.ListItem2.select()                       # Select Import ELD Option
+    app.MenuBar.type_keys('%FM')            # Open Import Dialog
+    app.Dialog.ListBox.ListItem2.select()   # Select Import ELD Option
     app.Dialog.Next.click()
 
     # Hardcoding this file path for now while there is just one.
-    # Will need to do something more clever as we have more strategies to import
+    # Will need to do something more clever as we have more strategies
+    # to import
     app.Dialog.ComboBox.Edit.set_edit_text(strategies)
 
     # Walk through dialogs
@@ -42,10 +39,10 @@ if __name__ == "__main__":
     app.Dialog.Finish.click()
     app.Dialog.Ok.click()
 
-    app.MenuBar.type_keys('%FX')                                # Exit TradeStation
+    app.MenuBar.type_keys('%FX')             # Exit TradeStation
 
-    if not app.CheckBox.get_toggle_state():                     # Turn off backups
+    if not app.CheckBox.get_toggle_state():  # Turn off backups
         app.CheckBox.toggle()
 
-    app.Dialog.No.click()                                       # Stop upgrade nagging
-    app.ExitTradeStation.click()                                # Bye bye
+    app.Dialog.No.click()                    # Stop upgrade nagging
+    app.ExitTradeStation.click()             # Bye bye
