@@ -1,7 +1,7 @@
 install_motd:
   file.managed:
     - name: /etc/motd
-    - source: salt://files/motd.template
+    - source: salt://{{ slspath }}/files/motd.template
     - user: root
     - group: root
     - mode: 644
