@@ -14,11 +14,11 @@ def launch_ts():
         app.wait('visible')
         app.UserNameEdit.set_edit_text('{{ tsuser }}')
         app.PasswordEdit.set_edit_text('{{ tspass }}')
-        app.Login.click()
+        app.Button2.click()             # Simulated Trading
 
         # Need to start Online this first time in Simulated mode
-        if not app.RadioButton2.get_toggle_state():
-            app.RadioButton2.toggle()
+        #if not app.RadioButton2.get_toggle_state():
+        #    app.RadioButton2.toggle()
 
         app.Main.wait('visible')
 

@@ -1,7 +1,29 @@
+@echo off
+set "Server={{ smbipaddr }}"
+set "RetryCount=0"
+
+rem Start tscon on console for default user
 for /f "skip=1 tokens=3 usebackq" %%s in (
   `query user %username%`
 ) do (
   %windir%\System32\tscon.exe %%s /dest:console
 )
 
+:CheckServer
+rem Ping server only once with a time limit of 1000 ms.
+%SystemRoot%\System32\ping.exe -n 1 -w 1000 %Server% >nul
+if not errorlevel 1 goto MapDrive
+
+rem Connection to server is not yet established. Give up after 30 seconds
+rem in case of not being in right LAN or no network connection at all or
+rem this server is currently not running.
+set /A RetryCount+=1
+if not %RetryCount%==30 goto CheckServer
+
+echo There is no connection to server %Server%.
+echo The network drive X: is not available.
+goto :EOF
+
+:MapDrive
+echo Mapping network drive X: ...
 net use {{ sharedrive }}: {{ fileshare }} /u:TS {{ userpass }}

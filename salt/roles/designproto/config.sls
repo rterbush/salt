@@ -7,6 +7,7 @@ create_win_logonscript:
         sharedrive: {{ pillar['sharedrive'] }}
         fileshare: {{ pillar['fileshare'] }}
         userpass: {{ pillar['userpass' ] }}
+        smbipaddr: {{ pillar['smbipaddr' ] }}
 
 set_winlogon_autoadminlogon:
   reg.present:
