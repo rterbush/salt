@@ -31,7 +31,10 @@ if __name__ == "__main__":
     # Hardcoding this file path for now while there is just one.
     # Will need to do something more clever as we have more strategies
     # to import
+    app.Dialog.type_keys('%F')
     app.Dialog.ComboBox.Edit.set_edit_text(strategies)
+    app.Dialog.Button2.click()
+    app.Open.Cancel.click()
 
     # Walk through dialogs
     app.Dialog.Next.click()
