@@ -17,7 +17,3 @@ disable_service_auditd:
 dead_service_postfix:
   service.dead:
     - name: postfix
-
-nfsd:
-  service.running:
-    - enable: True
