@@ -14,7 +14,7 @@ upload_ts:
 upload_install_script:
   file.managed:
     - name: {{ bits.destdir }}/auto-install-tradestation.py
-    - source: salt://{{ slspath }}/auto-install-tradestation.py
+    - source: salt://{{ slspath }}/files/auto-install-tradestation.py
     - makedirs: True
     - require:
       - file: upload_ts
