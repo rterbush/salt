@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     app.Finish.wait('visible')      # Wait for dialog to "Finish"
 
-    if not app.CheckBox.get_toggle_state():
+    if app.CheckBox.get_toggle_state():
         app.CheckBox.toggle()       # Check to start TradeStation
 
     app.Finish.click()              # Finished
