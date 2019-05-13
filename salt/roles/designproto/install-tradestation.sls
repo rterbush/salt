@@ -40,21 +40,21 @@ run_install_task:
     - task.run:
       - name: install-task
 
-delete_install_task:
-  module.run:
-    - task.delete_task:
-      - name: install-task
-    - require:
-      - module: run_install_task
+# delete_install_task:
+#   module.run:
+#     - task.delete_task:
+#       - name: install-task
+#     - require:
+#       - module: run_install_task
 
-cleanup_ts:
-  file.absent:
-    - name: {{ bits.destdir }}/{{ bits.tsbin }}
-    - require:
-      - module: run_install_task
+# cleanup_ts:
+#   file.absent:
+#     - name: {{ bits.destdir }}/{{ bits.tsbin }}
+#     - require:
+#       - module: run_install_task
 
-cleanup_script:
-  file.absent:
-    - name: {{ bits.destdir }}/auto-install-tradestation.py
-    - require:
-      - module: run_install_task
+# cleanup_script:
+#   file.absent:
+#     - name: {{ bits.destdir }}/auto-install-tradestation.py
+#     - require:
+#       - module: run_install_task
