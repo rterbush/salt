@@ -1,5 +1,6 @@
 ipython==7.4.0
 Pillow==6.0.0
+pywin32==224
 pywinauto==0.6.6
 pandas==0.24.2
 xlrd==1.2.0
