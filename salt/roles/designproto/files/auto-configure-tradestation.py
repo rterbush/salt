@@ -8,7 +8,7 @@ Timings.window_find_timeout = 120
 strategies = '{{ destdir }}\\000-BOS-SMART-CODE-V1.9.ELD'
 
 def launch_ts():
-    app = Desktop(backend="uia").window(title_re="TradeStation.*")
+    app = Desktop(backend="uia").window(title_re="TradeStation.*Desktop.*")
     if not app.exists():
         Popen('C:/Program Files (x86)/TradeStation 9.5/Program/ORPlat.exe', shell=True)
         app.wait('visible')
