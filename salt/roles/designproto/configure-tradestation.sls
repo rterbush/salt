@@ -1,13 +1,13 @@
 {%- load_yaml as bits %}
-destdir: 'C:/temp'
+destdir: 'C:\temp'
 srcdir: 'salt://roles/designproto/files'
 uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
 
 upload_config_script:
   file.managed:
-    - name: {{ bits.destdir }}/auto-configure-tradestation.py
-    - source: {{ bits.srcdir }}/auto-configure-tradestation.py
+    - name: {{ bits.destdir }}\auto-configure-tradestation.py
+    - source: salt://{{ slspath }}/files/auto-configure-tradestation.py
     - template: jinja
     - makedirs: True
     - defaults:
@@ -15,18 +15,6 @@ upload_config_script:
         datadir: {{ pillar['datadir'] }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
-
-create_wnode_ssh_public_key:
-  file.managed:
-    - name: 'C:\Users\TS\.ssh\wnode-ssh-key.pub'
-    - source: salt://{{ slspath }}/files/wnode-ssh-key.pub
-    - makedirs: True
-
-create_wnode_ssh_private_key:
-  file.managed:
-    - name: 'C:\Users\TS\.ssh\wnode-ssh-key'
-    - source: salt://{{ slspath }}/files/wnode-ssh-key
-    - makedirs: True
 
 create_config_task:
   module.run:
@@ -41,21 +29,21 @@ create_config_task:
       - trigger_type: 'Once'
       - force: True
       - allow_demand_start: True
-      - require:
-        - file: upload_config_script
+    - require:
+      - file: upload_config_script
 
 run_config_task:
   module.run:
-    - task.run_wait:
+    - task.run:
       - name: config-task
 
-delete_config_task:
-  module.run:
-    - task.delete_task:
-      - name: config-task
+# delete_config_task:
+#   module.run:
+#     - task.delete_task:
+#       - name: config-task
 
-cleanup_config_script:
-  file.absent:
-    - name: {{ bits.destdir }}/auto-configure-tradestation.py
-    - require:
-      - run: run_config_task
+# cleanup_config_script:
+#   file.absent:
+#     - name: {{ bits.destdir }}/auto-configure-tradestation.py
+#     - require:
+#       - run: run_config_task
