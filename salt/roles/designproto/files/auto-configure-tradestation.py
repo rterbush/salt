@@ -5,7 +5,7 @@ from pywinauto.timings import Timings
 Timings.slow()
 Timings.window_find_timeout = 120
 
-strategies = '{{ destdir }}\000-BOS-SMART-CODE-V1.9.ELD'
+strategies = "{{ destdir }}/000-BOS-SMART-CODE-V1.9.ELD"
 
 def launch_ts():
     app = Desktop(backend="uia").window(title_re="TradeStation.*Desktop.*")

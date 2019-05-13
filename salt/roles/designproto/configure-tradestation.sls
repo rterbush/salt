@@ -1,12 +1,12 @@
 {%- load_yaml as bits %}
-destdir: 'C:\temp'
+destdir: 'C:/temp'
 srcdir: 'salt://roles/designproto/files'
 uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
 
 upload_config_script:
   file.managed:
-    - name: {{ bits.destdir }}\auto-configure-tradestation.py
+    - name: {{ bits.destdir }}/auto-configure-tradestation.py
     - source: salt://{{ slspath }}/files/auto-configure-tradestation.py
     - template: jinja
     - makedirs: True
@@ -29,7 +29,7 @@ create_config_task:
       - password: {{ pillar['userpass'] }}
       - action_type: Execute
       - cmd: 'psexec'
-      - arguments: '\\{{ bits.uppernode }} -accepteula -nobanner -u {{ bits.uppernode }}\TS -p {{ pillar['userpass'] }} -h -i 1 C:\salt\bin\python.exe {{ bits.destdir }}\auto-configure-tradestation.py'
+      - arguments: '\\{{ bits.uppernode }} -accepteula -nobanner -u {{ bits.uppernode }}\TS -p {{ pillar['userpass'] }} -h -i 1 C:/salt/bin/python.exe {{ bits.destdir }}/auto-configure-tradestation.py'
       - trigger_enabled: True
       - trigger_type: 'Once'
       - force: True
