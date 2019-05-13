@@ -1,5 +1,5 @@
 {%- load_yaml as bits %}
-destdir: 'C:\temp'
+destdir: C:\\temp
 srcdir: 'salt://roles/designproto/files'
 uppernode: {{ grains['id'].split('.') | first | upper }}
 {%- endload %}
