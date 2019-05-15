@@ -14,7 +14,7 @@ def launch_ts():
         app.wait('visible')
         app.UserNameEdit.set_edit_text('{{ tsuser }}')
         app.PasswordEdit.set_edit_text('{{ tspass }}')
-        app.Button2.click()                 # Simulated Trading
+        app.Login.click()                # Must log in live first time
 
         app.Main.wait('visible')
 
