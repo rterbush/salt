@@ -3,7 +3,7 @@
 {{ dbconf.owner }}:
  user.present:
     - shell: /usr/sbin/nologin
-    - home: /var/lib/coinz/pgsql
+    - home: {{ dbconf.homedir }}
 
 systemd_postgresql:
   file.managed:

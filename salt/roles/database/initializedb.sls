@@ -1,27 +1,27 @@
-{% set stratconf = salt['pillar.get']('miningcore_conf') -%}
+{% set sysconf = salt['pillar.get']('systembuilder_conf') -%}
 {% set dbconf = salt['pillar.get']('postgresql_conf') -%}
 
-create_db_miningcore:
+create_db_systembuilder:
   postgres_user.present:
-    - name: {{ stratconf.dbuser }}
+    - name: {{ sysconf.dbuser }}
     - encrypted: True
     - refresh_password: True
     - login: True
-    - password: {{ stratconf.dbpass }}
+    - password: {{ sysconf.dbpass }}
     - db_user: {{ dbconf.owner }}
     - db_password: {{ dbconf.owner_pass }}
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
   postgres_database.present:
-    - name: miningcore
-    - owner: miningcore
+    - name: systembuilder
+    - owner: systembuilder
     - db_user: {{ dbconf.owner }}
     - db_password: {{ dbconf.owner_pass }}
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
   postgres_privileges.present:
-    - name: miningcore
-    - object_name: miningcore
+    - name: systembuilder
+    - object_name: systembuilder
     - object_type: database
     - privileges:
         - ALL
@@ -29,17 +29,3 @@ create_db_miningcore:
     - db_password: {{ dbconf.owner_pass }}
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
-
-restore_db_miningcore:
-  archive.extracted:
-    - name: /var/tmp
-    - source: s3://crush-bin/backups/miningcore_dump.sql.tar.xz
-    - source_hash: s3://crush-bin/backups/miningcore_dump.sql.tar.xz.sha256sum
-    - enforce_toplevel: False
-    - options: J
-    - archive_format: tar
-  cmd.run:
-    - name: '
-          PGPASSWORD={{ stratconf.dbpass }} psql -U miningcore -d miningcore -f /var/tmp/miningcore_dump.sql'
-  file.absent:
-    - name: /var/tmp/miningcore_dump.sql
