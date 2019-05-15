@@ -1,5 +1,5 @@
 if [ -n "$SSH_CLIENT" ]; then
     TEXT="$(date): ssh login to ${USER}@{{ grains['id'] }}"
     TEXT="$TEXT from $(echo $SSH_CLIENT|awk '{print $1}')"
-    echo $TEXT|mail -s "ssh login" admin@crushmining.com
+    echo $TEXT|mail -s "ssh login" root@terbush.org
 fi

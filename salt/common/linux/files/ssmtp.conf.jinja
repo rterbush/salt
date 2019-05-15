@@ -7,7 +7,7 @@
 #
 # The person who gets all mail for userids < 1000
 # Make this empty to disable rewriting.
-root=randy+ta@terbush.org
+root=root@terbush.org
 
 # The place where the mail goes. The actual machine name is required
 # no MX records are consulted. Commonly mailhosts are named mail.domain.com
@@ -29,12 +29,6 @@ UseTLS=YES
 UseSTARTTLS=YES
 #IMPORTANT: The following line is mandatory for TLS authentication
 TLS_CA_File=/etc/pki/tls/certs/ca-bundle.crt
-
-# Use SSL/TLS certificate to authenticate against smtp host.
-UseTLSCert=NO
-
-# Use this RSA certificate.
-#TLSCert=/etc/pki/tls/private/ssmtp.pem
 
 # Get enhanced (*really* enhanced) debugging information in the logs
 # If you want to have debugging of the config file parsing, move this
