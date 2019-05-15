@@ -24,7 +24,7 @@ initialize_postgres_database:
     - name: '
           /bin/chcon -R system_u:object_r:postgresql_log_t:s0 {{ dbconf.homedir }}'
   postgres_initdb.present:
-    - name: {{ dbconf.homedir }}
+    - name: {{ dbconf.homedir }}/data
     - auth: password
     - user: {{ dbconf.owner }}
     - password: {{ dbconf.owner_pass }}
