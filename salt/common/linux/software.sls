@@ -10,6 +10,7 @@ required_software:
       - bind-utils
       - nfs-utils
       - net-tools
+      - epel-release
       - lvm2
       - bzip2
       - gcc
