@@ -34,7 +34,7 @@ initialize_postgres_database:
 
 postgresql_conf:
   file.blockreplace:
-    - name: {{ dbconf.homedir }}/postgresql.conf
+    - name: {{ dbconf.homedir }}/data/postgresql.conf
     - marker_start: "# Managed by SaltStack: listen_addresses: please do not edit"
     - marker_end: "# Managed by SaltStack: end of salt managed zone --"
     - content: |
@@ -49,7 +49,7 @@ postgresql_conf:
 
 postgresql_pg_hba_conf:
   file.managed:
-    - name: {{ dbconf.homedir }}/pg_hba.conf
+    - name: {{ dbconf.homedir }}/data/pg_hba.conf
     - user: {{ dbconf.owner }}
     - mode: 600
 {%- if dbconf.acls %}
