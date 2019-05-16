@@ -30,7 +30,7 @@ create_db_systembuilder:
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
 
-create_salt_queue_user:
+create_db_salt_queues:
   postgres_user.present:
     - name: salt
     - encrypted: True
@@ -41,8 +41,6 @@ create_salt_queue_user:
     - db_password: salt
     - db_host: salt
     - db_port: {{ dbconf.dbport }}
-
-create_salt_queue_db:
   postgres_database.present:
     - name: salt
     - owner: salt
@@ -50,8 +48,6 @@ create_salt_queue_db:
     - db_password: salt
     - db_host: salt
     - db_port: {{ dbconf.dbport }}
-
-configure_salt_queue_priv:
   postgres_privileges.present:
     - name: salt
     - object_name: salt
@@ -63,12 +59,16 @@ configure_salt_queue_priv:
     - db_host: salt
     - db_port: {{ dbconf.dbport }}
 
-init_salt_queues_db:
+copy_db_init_sql:
   file.managed:
     - name: /var/tmp/init-salt-queues.sql
     - source: files://{{ slspath }}/files/init-salt-queues.sql
+
+apply_db_init_sql:
   cmd.run:
     - name: '
           PGPASSWORD=salt psql -U salt -d salt -f /var/tmp/init-salt-queues.sql'
+
+remove_db_init_sql:
   file.absent:
     - name: /var/tmp/init-salt-queues.sql
