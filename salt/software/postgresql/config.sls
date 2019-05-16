@@ -7,7 +7,7 @@
 
 systemd_postgresql:
   file.managed:
-    - name: /etc/systemd/system/postgresql.service
+    - name: /etc/systemd/system/postgresql-9.6.service
     - source: salt://software/postgresql/files/postgresql.service.jinja
     - template: jinja
     - mode: 644
@@ -61,7 +61,7 @@ postgresql_pg_hba_conf:
 
 run_daemon_postgresql:
   service.running:
-    - name: postgresql
+    - name: postgresql-9.6
     - enable: True
     - provider: systemd
     - require:
