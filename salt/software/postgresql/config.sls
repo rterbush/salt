@@ -31,7 +31,7 @@ postgresql_conf:
 postgresql_pg_hba_conf:
   file.managed:
     - name: {{ dbconf.homedir }}/pg_hba.conf
-    - user: {{ dbconf.dbuser }}
+    - user: {{ dbconf.owner }}
     - mode: 600
 {%- if dbconf.acls %}
     - source: salt://{{ slspath }}/files/pg_hba.conf.j2
