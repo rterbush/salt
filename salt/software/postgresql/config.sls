@@ -28,6 +28,18 @@ postgresql_conf:
     - show_changes: True
     - append_if_not_found: True
 
+postgresql_pg_hba_conf:
+  file.managed:
+    - name: {{ dbconf.homedir }}/pg_hba.conf
+    - user: {{ dbconf.dbuser }}
+    - mode: 600
+{%- if dbconf.acls %}
+    - source: {{ dbconf.pg_hba.conf }}
+    - template: jinja
+    - defaults:
+        acls: {{ dbconf.acls|yaml() }}
+{%- endif %}
+
 initialize_postgres_database:
   file.directory:
     - name: {{ dbconf.homedir }}
