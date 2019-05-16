@@ -9,6 +9,7 @@ required_software:
       - deltarpm
       - bind-utils
       - nfs-utils
+      - net-tools
       - lvm2
       - bzip2
       - gcc
