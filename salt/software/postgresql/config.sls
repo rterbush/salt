@@ -34,7 +34,7 @@ postgresql_pg_hba_conf:
     - user: {{ dbconf.dbuser }}
     - mode: 600
 {%- if dbconf.acls %}
-    - source: {{ dbconf.pg_hba.conf }}
+    - source: salt://{{ slspath }}/files/pg_hba.conf.j2
     - template: jinja
     - defaults:
         acls: {{ dbconf.acls|yaml() }}
