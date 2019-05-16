@@ -62,12 +62,12 @@ create_db_salt_queues:
 copy_db_init_sql:
   file.managed:
     - name: /var/tmp/init-salt-queues.sql
-    - source: files://{{ slspath }}/files/init-salt-queues.sql
+    - source: salt://{{ slspath }}/files/init-salt-queues.sql
 
 apply_db_init_sql:
   cmd.run:
     - name: '
-          PGPASSWORD=salt psql -h {{ dbconf.dbhost }} -U salt -d salt -f /var/tmp/init-salt-queues.sql'
+          PGPASSWORD=salt psql -h {{ dbconf.dbhost }} -U {{ dbconf.owner }} -d {{ db.owner_pass }} -f /var/tmp/init-salt-queues.sql'
 
 remove_db_init_sql:
   file.absent:
