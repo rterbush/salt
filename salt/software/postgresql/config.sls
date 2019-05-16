@@ -13,6 +13,21 @@ systemd_postgresql:
     - mode: 644
     - replace: True
 
+postgresql_conf:
+  file.blockreplace:
+    - name: {{ dbconf.homedir }}/postgresql.conf
+    - marker_start: "# Managed by SaltStack: listen_addresses: please do not edit"
+    - marker_end: "# Managed by SaltStack: end of salt managed zone --"
+    - content: |
+        {%- if dbconf.postgresconf %}
+        {{ dbconf.postgresconf|indent(8) }}
+        {%- endif %}
+        {%- if dbconf.dbport %}
+        port = {{ dbconf.dbport }}
+        {%- endif %}
+    - show_changes: True
+    - append_if_not_found: True
+
 initialize_postgres_database:
   file.directory:
     - name: {{ dbconf.homedir }}

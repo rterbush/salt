@@ -39,14 +39,14 @@ create_db_salt_queues:
     - password: salt
     - db_user: salt
     - db_password: salt
-    - db_host: salt
+    - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
   postgres_database.present:
     - name: salt
     - owner: salt
     - db_user: salt
     - db_password: salt
-    - db_host: salt
+    - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
   postgres_privileges.present:
     - name: salt
@@ -56,7 +56,7 @@ create_db_salt_queues:
         - ALL
     - db_user: salt
     - db_password: salt
-    - db_host: salt
+    - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
 
 copy_db_init_sql:
@@ -67,7 +67,7 @@ copy_db_init_sql:
 apply_db_init_sql:
   cmd.run:
     - name: '
-          PGPASSWORD=salt psql -U salt -d salt -f /var/tmp/init-salt-queues.sql'
+          PGPASSWORD=salt psql -h {{ dbconf.dbhost }} -U salt -d salt -f /var/tmp/init-salt-queues.sql'
 
 remove_db_init_sql:
   file.absent:
