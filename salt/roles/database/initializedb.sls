@@ -67,7 +67,7 @@ copy_db_init_sql:
 apply_db_init_sql:
   cmd.run:
     - name: '
-          PGPASSWORD=salt psql -h {{ dbconf.dbhost }} -U {{ dbconf.owner }} -d {{ db.owner_pass }} -f /var/tmp/init-salt-queues.sql'
+          PGPASSWORD={{ dbconf.owner_pass }} psql -h {{ dbconf.dbhost }} -U {{ dbconf.owner }} -f /var/tmp/init-salt-queues.sql'
 
 remove_db_init_sql:
   file.absent:
