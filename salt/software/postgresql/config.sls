@@ -13,6 +13,25 @@ systemd_postgresql:
     - mode: 644
     - replace: True
 
+initialize_postgres_database:
+  file.directory:
+    - name: {{ dbconf.homedir }}
+    - makedirs: true
+    - user: {{ dbconf.owner }}
+    - group: {{ dbconf.group }}
+    - dir_mode: 700
+  cmd.run:
+    - name: '
+          /bin/chcon -R system_u:object_r:postgresql_log_t:s0 {{ dbconf.homedir }}'
+  postgres_initdb.present:
+    - name: {{ dbconf.homedir }}/data
+    - auth: password
+    - user: {{ dbconf.owner }}
+    - password: {{ dbconf.owner_pass }}
+    - encoding: UTF8
+    - locale: C
+    - runas: {{ dbconf.owner }}
+
 postgresql_conf:
   file.blockreplace:
     - name: {{ dbconf.homedir }}/postgresql.conf
@@ -39,25 +58,6 @@ postgresql_pg_hba_conf:
     - defaults:
         acls: {{ dbconf.acls|yaml() }}
 {%- endif %}
-
-initialize_postgres_database:
-  file.directory:
-    - name: {{ dbconf.homedir }}
-    - makedirs: true
-    - user: {{ dbconf.owner }}
-    - group: {{ dbconf.group }}
-    - dir_mode: 700
-  cmd.run:
-    - name: '
-          /bin/chcon -R system_u:object_r:postgresql_log_t:s0 {{ dbconf.homedir }}'
-  postgres_initdb.present:
-    - name: {{ dbconf.homedir }}/data
-    - auth: password
-    - user: {{ dbconf.owner }}
-    - password: {{ dbconf.owner_pass }}
-    - encoding: UTF8
-    - locale: C
-    - runas: {{ dbconf.owner }}
 
 run_daemon_postgresql:
   service.running:
