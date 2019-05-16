@@ -30,8 +30,8 @@ create_db_systembuilder:
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
 
-create_db_salt_queues:
-    postgres_user.present:
+create_salt_queue_user:
+  postgres_user.present:
     - name: salt
     - encrypted: True
     - refresh_password: True
@@ -41,6 +41,8 @@ create_db_salt_queues:
     - db_password: salt
     - db_host: salt
     - db_port: {{ dbconf.dbport }}
+
+create_salt_queue_db:
   postgres_database.present:
     - name: salt
     - owner: salt
@@ -48,6 +50,8 @@ create_db_salt_queues:
     - db_password: salt
     - db_host: salt
     - db_port: {{ dbconf.dbport }}
+
+configure_salt_queue_priv:
   postgres_privileges.present:
     - name: salt
     - object_name: salt
