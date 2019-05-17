@@ -1,7 +1,6 @@
 {% set id_or_name = data.id or data.name %}
 register_windows_worker:
-  runner.state.orchestrate_single:
-    - fun: queue.insert
-    - name: winworkers
+  runner.state.orchestrate:
+    - mods: orch.register-worker
     - pillar:
         node: {{ id_or_name }}
