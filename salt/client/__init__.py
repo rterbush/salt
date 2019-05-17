@@ -1878,11 +1878,13 @@ class LocalClient(object):
 
             raise PublishError(error)
 
+        channel.stop()
+        # We have the payload, let's get rid of the channel fast(GC'ed faster)
+        del channel
+
         if not payload:
             return payload
 
-        # We have the payload, let's get rid of the channel fast(GC'ed faster)
-        del channel
 
         return {'jid': payload['load']['jid'],
                 'minions': payload['load']['minions']}
@@ -1995,11 +1997,11 @@ class LocalClient(object):
 
             raise PublishError(error)
 
-        if not payload:
-            raise tornado.gen.Return(payload)
-
         # We have the payload, let's get rid of the channel fast(GC'ed faster)
         del channel
+
+        if not payload:
+            raise tornado.gen.Return(payload)
 
         raise tornado.gen.Return({'jid': payload['load']['jid'],
                                   'minions': payload['load']['minions']})
