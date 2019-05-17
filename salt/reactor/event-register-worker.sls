@@ -1,5 +1,6 @@
-{% if grains['os'] == 'Windows' %}
 {% set id_or_name = data.id or data.name %}
+{% set os = salt.saltutil.runner('mine.get', tgt=id_or_name, fun='os') %}
+{% if os[id_or_name] == 'Windows' %}
 register_windows_worker:
   runner.queue.insert:
     - queue: winworker
