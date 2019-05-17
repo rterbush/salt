@@ -9,3 +9,7 @@ postgresql_software_install:
         - postgresql94
         - postgresql94-server
         - postgresql94-contrib
+
+python_jsonb_required software:
+  pkg.installed:
+    - name: python36-psycopg2
