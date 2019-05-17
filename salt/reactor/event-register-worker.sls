@@ -3,5 +3,5 @@
 register_windows_worker:
   runner.queue.insert:
     - queue: winworker
-    - items: '{"node": "{{ id_or_name }}" }'
+    - items: {{ id_or_name }}
 {% endif %}
