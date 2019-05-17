@@ -32,8 +32,6 @@ def run_notepad():
 
     app.start(r"notepad.exe")
 
-    app.Notepad.menu_select("File->PageSetup")
-
     # type some text - note that extended characters ARE allowed
     app.Notepad.Edit.set_edit_text("I am typing s\xe4me text to Notepad\r\n\r\n"
         "And then I am going to quit")
