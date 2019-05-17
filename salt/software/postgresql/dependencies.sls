@@ -6,6 +6,6 @@ postgresql_repo_install:
 postgresql_software_install:
   pkg.latest:
     - pkgs:
-        - postgresql96
-        - postgresql96-server
-        - postgresql96-contrib
+        - postgresql94
+        - postgresql94-server
+        - postgresql94-contrib

@@ -9,7 +9,7 @@
 use_superseded:
   - module.run
 
-postgres.bins_dir: '/usr/pgsql-9.6/bin/'
+postgres.bins_dir: '/usr/pgsql-9.4/bin/'
 
 # Per default the minion will automatically include all config files
 # from minion.d/*.conf (minion.d is a directory in the same directory
