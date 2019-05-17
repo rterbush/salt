@@ -40,12 +40,8 @@ def run_notepad():
     app.Notepad.menu_select("File->SaveAs")
     app.SaveAs.EncodingComboBox.select("UTF-8")
     app.SaveAs.Edit.set_edit_text("example-utf8.txt")
-    app.SaveAs.Save.close_click()
-
-    # while the dialog exists wait upto 30 seconds (and yes it can
-    # take that long on my computer sometimes :-( )
-    app.SaveAsDialog2.Cancel.wait_not('enabled')
-    app.SaveAs.Yes.wait('exists').close_click()
+    app.SaveAs.Save.click()
+    app.ConfirmSaveAs.Yes.wait('exists').click()
 
     time.sleep(20)
 
@@ -59,7 +55,7 @@ if __name__ == "__main__":
     __opts__    = salt.config.minion_config()
     __grains__  = salt.loader.grains(__opts__)
 
-    event_complete   = ('systembuilder/task/{0}/completed', __grains__['id'])
+    event_complete   = ('systembuilder/task/{0}/completed').format(__grains__['id'])
 
     ret = __caller__.cmd('event.send',
                         event_complete,
