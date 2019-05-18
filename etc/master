@@ -153,7 +153,7 @@ timeout: 60
 # be set. See various returners in salt/returners for details on required
 # configuration values. (See also, event_return_queue below.)
 #
-#event_return: mysql
+event_return: pgjsonb
 
 # On busy systems, enabling event_returns can cause a considerable load on
 # the storage system for returners. Events can be queued on the master and
@@ -1251,8 +1251,12 @@ git_pillar_provider: gitpython
 #####      Returner settings          ######
 ############################################
 # Which returner(s) will be used for minion's result:
-#return: mysql
-
+return: pgjsonb
+returner.pgjsonb.host: 'salt'
+returner.pgjsonb.user: 'salt'
+returner.pgjsonb.pass: 'salt'
+returner.pgjsonb.db: 'salt'
+returner.pgjsonb.port: 5432
 
 ######    Miscellaneous  settings     ######
 ############################################
@@ -1260,7 +1264,7 @@ git_pillar_provider: gitpython
 #event_match_type: startswith
 
 # Save runner returns to the job cache
-#runner_returns: True
+runner_returns: True
 
 # Permanently include any available Python 3rd party modules into thin and minimal Salt
 # when they are generated for Salt-SSH or other purposes.
