@@ -1,5 +1,7 @@
 DROP DATABASE IF EXISTS salt;
 CREATE DATABASE salt WITH ENCODING 'utf-8';
+GRANT ALL ON DATABASE salt TO salt;
+\connect salt;
 
 --
 -- Table structure for table `salt`

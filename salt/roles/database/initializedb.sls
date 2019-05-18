@@ -41,23 +41,6 @@ create_db_salt_queues:
     - db_password: {{ dbconf.owner_pass }}
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
-  postgres_database.present:
-    - name: salt
-    - owner: salt
-    - db_user: {{ dbconf.owner }}
-    - db_password: {{ dbconf.owner_pass }}
-    - db_host: {{ dbconf.dbhost }}
-    - db_port: {{ dbconf.dbport }}
-  postgres_privileges.present:
-    - name: salt
-    - object_name: salt
-    - object_type: database
-    - privileges:
-        - ALL
-    - db_user: {{ dbconf.owner }}
-    - db_password: {{ dbconf.owner_pass }}
-    - db_host: {{ dbconf.dbhost }}
-    - db_port: {{ dbconf.dbport }}
 
 copy_db_init_sql:
   file.managed:
