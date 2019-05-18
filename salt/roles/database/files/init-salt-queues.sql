@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS salt;
 CREATE DATABASE salt WITH ENCODING 'utf-8' WITH OWNER salt;
 GRANT ALL PRIVILEGES ON DATABASE salt TO salt;
 \connect salt;
-
+CREATE SCHEMA IF NOT EXISTS salt AUTHORIZATION salt;
 --
 -- Table structure for table `salt`
 --
