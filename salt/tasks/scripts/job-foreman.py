@@ -31,7 +31,7 @@ class JobForeman(object):
 
     def workerPop(self):
         n = self.runner.cmd('queue.pop', ['winworker'], print_event=False)
-        return n
+        return n[0]
 
     def jobPop(self):
         j = self.runner.cmd('queue.pop', ['winjob'], backend='pgjsonb', print_event=False)
@@ -42,24 +42,36 @@ class JobForeman(object):
         return p
 
     def scheduleWork(self, args, password):
-        task = {}
-        task['schedule_work'] = {
-            'module.run': [
-                {'name': 'task.create_task'},
-                {'m_name': 'scheduled-work'},
-                {'m_user_name': 'TS'},
-                {'m_password': password },
-                {'m_action_type': 'Execute'},
-                {'m_cmd': 'psexec'},
-                {'m_arguments': args },
-                {'m_trigger_enabled': 'True'},
-                {'m_trigger_type': 'Once'},
-                {'m_force': 'True'},
-                {'m_allow_demand_start': 'True'},
-            ]
-        }
+        # task = {}
+        # task['schedule_work'] = {
+        #     'module.run': [
+        #         {'name': 'task.create_task'},
+        #         {'m_name': 'scheduled-work'},
+        #         {'m_user_name': 'TS'},
+        #         {'m_password': password },
+        #         {'m_action_type': 'Execute'},
+        #         {'m_cmd': 'psexec'},
+        #         {'m_arguments': args },
+        #         {'m_trigger_enabled': 'True'},
+        #         {'m_trigger_type': 'Once'},
+        #         {'m_force': 'True'},
+        #         {'m_allow_demand_start': 'True'},
+        #     ]
+        # }
+        t = self.runner.cmd('win_task.create_task', ['scheduled-work'],
+         user_name='TS', password=password, action_type='Execute', cmd=args, trigger_type='Once', allow_demand_start=True )
+        return t
 
-        return self.runner.cmd(task)
+    def runWork(self):
+        # task = {}
+        # task['run_work'] = {
+        #     'module.run': [
+        #         {'name': 'task.run'},
+        #         {'m_name': 'scheduled-work'},
+        #     ]
+        # }
+        t = self.runner.cmd('win_task.run', ['scheduled-work'])
+        return t
 
 
 if __name__ == "__main__":
@@ -69,21 +81,23 @@ if __name__ == "__main__":
     while True:
         try:
             workerCnt = jf.workerCount()
-            jobCnt = jf.jobCount()
-            time.sleep(10)
+            #jobCnt = jf.jobCount()
         except:
             raise
+
         jobCnt = 1
         if workerCnt > 0 and jobCnt > 0:
             node = jf.workerPop()
-            unode = re.split('^(\w+)\..*$', node)[0].upper()
-            job = jf.jobPop()
+            unode = re.split('^(\w+)\..*$', node)[1].upper()
+            #job = jf.jobPop()
             pil = jf.workerPillar(node)
-            task = job['task']
+            #task = job['task']
+            task = 'test'
 
-            args = ('\\{0} -acceptula -nobanner -u {1}\TS -p {2} -h -i 1 python.exe {3}').format(node, unode, pil['userpass'], jobscript['test'] )
+            args = ('\\\\{0} -acceptula -nobanner -u {1}\TS -p {2} -h -i 1 python.exe C:\\temp\\{3}').format(node, unode, pil['userpass'], jobscript[task] )
             print(args)
-
-            #ret = jf.scheduleWork(args, pill['userpass'])
+            jf.scheduleWork(args, pil['userpass'])
+            jf.runWork()
+            time.sleep(5)
 
 
