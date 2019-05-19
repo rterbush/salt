@@ -229,7 +229,11 @@ class AsyncTCPReqChannel(salt.transport.client.ReqChannel):
         Only create one instance of channel per __key()
         '''
         # do we have any mapping for this io_loop
-        io_loop = kwargs.get('io_loop') or tornado.ioloop.IOLoop.current()
+        if 'io_loop' in kwargs:
+            io_loop = kwargs['io_loop']
+        else:
+            io_loop = salt.utils.asynchronous.IOLoop()
+
         if io_loop not in cls.instance_map:
             cls.instance_map[io_loop] = weakref.WeakValueDictionary()
         loop_instance_map = cls.instance_map[io_loop]
@@ -276,7 +280,10 @@ class AsyncTCPReqChannel(salt.transport.client.ReqChannel):
         # crypt defaults to 'aes'
         self.crypt = kwargs.get('crypt', 'aes')
 
-        self.io_loop = kwargs.get('io_loop') or tornado.ioloop.IOLoop.current()
+        if 'io_loop' in kwargs:
+            self.io_loop = kwargs['io_loop']
+        else:
+            self.io_loop = salt.utils.asynchronous.IOLoop()
 
         if self.crypt != 'clear':
             self.auth = salt.crypt.AsyncAuth(self.opts, io_loop=self.io_loop)
@@ -421,7 +428,11 @@ class AsyncTCPPubChannel(salt.transport.mixins.auth.AESPubClientMixin, salt.tran
         self.serial = salt.payload.Serial(self.opts)
 
         self.crypt = kwargs.get('crypt', 'aes')
-        self.io_loop = kwargs.get('io_loop') or tornado.ioloop.IOLoop.current()
+        if 'io_loop' in kwargs:
+            self.io_loop = kwargs['io_loop']
+        else:
+            self.io_loop = salt.utils.asynchronous.IOLoop()
+
         self.connected = False
         self._closing = False
         self._reconnected = False
@@ -521,7 +532,11 @@ class AsyncTCPPubChannel(salt.transport.mixins.auth.AESPubClientMixin, salt.tran
                     'data': data,
                     'tag': tag}
             req_channel = salt.utils.asynchronous.SyncWrapper(
-                AsyncTCPReqChannel, (self.opts,)
+                AsyncTCPReqChannel,
+                (self.opts,),
+                stop_methods=[
+                    'close',
+                ],
             )
             try:
                 req_channel.send(load, timeout=60)
@@ -757,7 +772,7 @@ class SaltMessageServer(tornado.tcpserver.TCPServer, object):
     '''
     def __init__(self, message_handler, *args, **kwargs):
         super(SaltMessageServer, self).__init__(*args, **kwargs)
-        self.io_loop = tornado.ioloop.IOLoop.current()
+        self.io_loop = salt.utils.asynchronous.IOLoop()
 
         self.clients = []
         self.message_handler = message_handler
@@ -921,7 +936,7 @@ class SaltMessageClient(object):
         self.connect_callback = connect_callback
         self.disconnect_callback = disconnect_callback
 
-        self.io_loop = io_loop or tornado.ioloop.IOLoop.current()
+        self.io_loop = io_loop or salt.utils.asynchronous.IOLoop()
 
         with salt.utils.asynchronous.current_ioloop(self.io_loop):
             self._tcp_client = TCPClientKeepAlive(opts, resolver=resolver)
@@ -953,7 +968,7 @@ class SaltMessageClient(object):
             # _stream_return() completes by restarting the IO Loop.
             # This will prevent potential errors on shutdown.
             try:
-                orig_loop = tornado.ioloop.IOLoop.current()
+                orig_loop = salt.utils.asynchronous.IOLoop()
                 self.io_loop.make_current()
                 self._stream.close()
                 if self._read_until_future is not None:
@@ -1431,7 +1446,7 @@ class TCPPubServerChannel(salt.transport.server.PubServerChannel):
 
         # Check if io_loop was set outside
         if self.io_loop is None:
-            self.io_loop = tornado.ioloop.IOLoop.current()
+            self.io_loop = salt.utils.asynchronous.IOLoop()
 
         # Spin up the publisher
         pub_server = PubServer(self.opts, io_loop=self.io_loop)

@@ -127,7 +127,7 @@ class AsyncZeroMQReqChannel(salt.transport.client.ReqChannel):
         io_loop = kwargs.get('io_loop')
         if io_loop is None:
             install_zmq()
-            io_loop = ZMQDefaultLoop.current()
+            io_loop = salt.utils.asynchronous.IOLoop()
         if io_loop not in cls.instance_map:
             cls.instance_map[io_loop] = weakref.WeakValueDictionary()
         loop_instance_map = cls.instance_map[io_loop]
@@ -201,7 +201,7 @@ class AsyncZeroMQReqChannel(salt.transport.client.ReqChannel):
         self._io_loop = kwargs.get('io_loop')
         if self._io_loop is None:
             install_zmq()
-            self._io_loop = ZMQDefaultLoop.current()
+            self._io_loop = salt.utils.asynchronous.IOLoop()
 
         if self.crypt != 'clear':
             # we don't need to worry about auth as a kwarg, since its a singleton
@@ -398,7 +398,9 @@ class AsyncZeroMQPubChannel(salt.transport.mixins.auth.AESPubClientMixin, salt.t
 
         if self.io_loop is None:
             install_zmq()
+            # TODO: Validate we can switch to salt.utils.asynchronous here.
             self.io_loop = ZMQDefaultLoop.current()
+            #self.io_loop = salt.utils.asynchronous.IOLoop()
 
         self.hexid = hashlib.sha1(salt.utils.stringutils.to_bytes(self.opts['id'])).hexdigest()
         self.auth = salt.crypt.AsyncAuth(self.opts, io_loop=self.io_loop)
@@ -1116,7 +1118,9 @@ class AsyncReqMessageClient(object):
         self.linger = linger
         if io_loop is None:
             install_zmq()
-            ZMQDefaultLoop.current()
+            # TODO: Validate we can switch to salt.utils.asynchronous here.
+            self.io_loop = ZMQDefaultLoop.current()
+            #self.io_loop = salt.utils.asynchronous.IOLoop()
         else:
             self.io_loop = io_loop
 

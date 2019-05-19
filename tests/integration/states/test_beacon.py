@@ -5,17 +5,28 @@ Integration tests for the beacon states
 
 # Import Python Libs
 from __future__ import absolute_import, print_function, unicode_literals
+import logging
+
+import tornado
 
 # Import Salt Testing Libs
+import salt.utils.versions
+from salt.ext.six import PY3
 from tests.support.case import ModuleCase
 from tests.support.helpers import destructiveTest
 from tests.support.mixins import SaltReturnAssertsMixin
+from tests.support.unit import skipIf
 
-import logging
+
 log = logging.getLogger(__name__)
 
+TORNADO_50 = (
+    salt.utils.versions.LooseVersion(tornado.version) >=
+    salt.utils.versions.LooseVersion('5.0')
+)
 
 @destructiveTest
+@skipIf(TORNADO_50 and PY3, "We need to make this work with tornado 5.0")
 class BeaconStateTestCase(ModuleCase, SaltReturnAssertsMixin):
     '''
     Test beacon states
