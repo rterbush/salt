@@ -14,6 +14,8 @@ upload_config_script:
         destdir: {{ bits.destdir }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
+        tsprog: {{ pillar['tsprogram'] }}
+        smartcode: {{ pillar['smartcode'] }}
 
 upload_smart_code_framework:
   file.managed:
