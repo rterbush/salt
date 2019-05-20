@@ -1,0 +1,28 @@
+[Unit]
+Description=System Development Data Mining Service
+After=network.target
+
+[Service]
+User=root
+Group=root
+
+Type=simple
+PermissionsStartOnly=true
+ExecStartPre=-/usr/bin/mkdir -p /run/grinder
+ExecStartPre=/usr/bin/chown -R root:root /run/grinder
+PIDFile=/run/grinder/grinder.pid
+WorkingDirectory={{ workingdir }}
+ExecStart={{ sbindir }}/grinderd.py
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=60s
+StartLimitInterval=120s
+StartLimitBurst=5
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=grinderd
+
+[Install]
+WantedBy=multi-user.target

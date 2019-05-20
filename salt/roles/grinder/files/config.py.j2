@@ -7,15 +7,15 @@ import yaml
 from os import path, makedirs
 from socket import gethostname
 
-DB_URI = "postgresql+psycopg2://<username>:<password>@<host>:<port>/<database>"
+DB_URI = "postgresql+psycopg2://{{ dbuser }}:{{ dbpass }}@{{ dbhost }}:{{ dbport }}/{{ database }}"
 
 TS = {
-    "username": "tradestation username",
-    "password": "tradestation password",
-    "program": "C:\TradeStation9.5\Program\ORPlat.exe",
+    "username": "{{ tsuser }}",
+    "password": "{{ tspass }}",
+    "program": "{{ tsprog }}",
 }
 
-BOS_WORKING_DIR = "C:\BOS_FILES"
+BOS_WORKING_DIR = "{{ filesdir }}"
 if not path.exists(path.join(BOS_WORKING_DIR, "DP_XML")):
     makedirs(path.join(BOS_WORKING_DIR, "DP_XML"))
 if not path.exists(path.join(BOS_WORKING_DIR, "TEMPLATES")):
