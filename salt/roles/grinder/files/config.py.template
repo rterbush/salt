@@ -1,0 +1,47 @@
+#
+# config.py.template
+#
+import logging.config
+import yaml
+
+from os import path, makedirs
+from socket import gethostname
+
+DB_URI = "postgresql+psycopg2://<username>:<password>@<host>:<port>/<database>"
+
+TS = {
+    "username": "tradestation username",
+    "password": "tradestation password",
+    "program": "C:\TradeStation9.5\Program\ORPlat.exe",
+}
+
+BOS_WORKING_DIR = "C:\BOS_FILES"
+if not path.exists(path.join(BOS_WORKING_DIR, "DP_XML")):
+    makedirs(path.join(BOS_WORKING_DIR, "DP_XML"))
+if not path.exists(path.join(BOS_WORKING_DIR, "TEMPLATES")):
+    makedirs(path.join(BOS_WORKING_DIR, "TEMPLATES"))
+if not path.exists(path.join(BOS_WORKING_DIR, "IS")):
+    makedirs(path.join(BOS_WORKING_DIR, "IS"))
+if not path.exists(path.join(BOS_WORKING_DIR, "OOS")):
+    makedirs(path.join(BOS_WORKING_DIR, "OOS"))
+
+
+def setup_logging(
+    config_file='logging.yaml', default_level=logging.INFO
+):
+    if path.exists(config_file):
+        with open(config_file, 'rt') as f:
+            config = yaml.safe_load(f.read().format(path=LOG_DIR))
+        logging.config.dictConfig(config)
+    else:
+        logging.basicConfig(level=default_level)
+
+WFA_CONST = {
+    'Generations': 25,
+    'PopulationSize': 500,
+    'CrossOverRate': 0.05,
+    'MutationRate': 0.90,
+    'ExcludeFirst': 0,
+    'ExcludeLast': 20,
+    'KeepTests': 8000,
+}
