@@ -38,7 +38,7 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/create_data_series.py:
+{{ bits.destdir }}/bin/gen_prototype_code.py:
   file.managed:
     - source: salt://{{ slspath }}/files/02_gen_prototype_code.py
     - user: root
@@ -65,7 +65,7 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
         tsprog: {{ pillar['tsprogram'] }}
-        filesdir: {{ filesdir }}
+        filesdir: {{ bits.filesdir }}
 
 {{ bits.destdir }}/sbin/grinderd.py:
   file.managed:
