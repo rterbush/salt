@@ -43,7 +43,7 @@ class JobForeman(object):
         return p
 
     def scheduleWork(self, minion, args, password):
-        print("sending work to {0}..." % minion)
+        print("sending work to %s..." % minion)
         t = self.local.cmd(minion, 'task.create_task', ['scheduled-work'],
             kwarg = {
             'user_name': 'TS',
@@ -67,6 +67,7 @@ if __name__ == "__main__":
 
     jf = JobForeman()
 
+    print("Waiting for workers...")
     while True:
         try:
             workerCnt = jf.workerCount()

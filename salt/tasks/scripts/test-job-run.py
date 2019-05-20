@@ -6,6 +6,7 @@ from __future__ import print_function
 import os.path
 import sys
 import time
+sys.stderr = open('C:\\temp\\err.txt', 'w')
 
 import salt.config
 import salt.loader
@@ -24,6 +25,7 @@ from pywinauto.findbestmatch import MatchError
 from pywinauto.timings import Timings
 
 Timings.slow()
+Timings.window_find_timeout = 90
 
 def run_notepad():
     """Run notepad and do some small stuff with it"""
@@ -49,14 +51,13 @@ def run_notepad():
 
 
 if __name__ == "__main__":
-    run_notepad()
-
     __caller__  = salt.client.Caller()
     __opts__    = salt.config.minion_config('C:/salt/conf/minion')
     __grains__  = salt.loader.grains(__opts__)
 
-    estr   = ('systembuilder/task/{0}/completed').format(__grains__['id'])
+    run_notepad()
 
+    estr   = ('systembuilder/task/{0}/completed').format(__grains__['id'])
     ret = __caller__.cmd('event.send', estr,
                         { 'completed': True,
                         'message': "System Builder job completed"})
