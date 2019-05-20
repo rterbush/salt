@@ -5,9 +5,20 @@
     - shell: /usr/sbin/nologin
     - home: {{ dbconf.homedir }}
 
+/etc/profile.d/postgresql.sh:
+  file.managed:
+    - source: salt://{{ slspath }}/files/postgresql.sh.j2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - replace: True
+    - defaults:
+        pgversion: {{ dbconf.version }}
+
 systemd_postgresql:
   file.managed:
-    - name: /etc/systemd/system/postgresql-9.6.service
+    - name: /etc/systemd/system/postgresql-{{- dbconf.version -}}.service
     - source: salt://software/postgresql/files/postgresql.service.jinja
     - template: jinja
     - mode: 644
@@ -61,7 +72,7 @@ postgresql_pg_hba_conf:
 
 run_daemon_postgresql:
   service.running:
-    - name: postgresql-9.6
+    - name: postgresql-{{- dbconf.version }}
     - enable: True
     - provider: systemd
     - require:
