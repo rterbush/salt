@@ -101,6 +101,9 @@ if __name__ == "__main__":
                 if ret[node] is not True:
                     print("Failed to run work...")
                     exit()
+            else:
+                time.sleep(10)
+
         except Exception as err:
             print("%s", err)
             exit(1)
