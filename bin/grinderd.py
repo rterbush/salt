@@ -43,7 +43,8 @@ class JobForeman(object):
         return p
 
     def scheduleWork(self, minion, args, password):
-        t = self.local.cmd(minion, 'win_task.create_task',['schedule-work'],
+        print("sending work to {0}..." % minion)
+        t = self.local.cmd(minion, 'task.create_task', ['scheduled-work'],
             kwarg = {
             'user_name': 'TS',
             'password': password,
@@ -58,7 +59,7 @@ class JobForeman(object):
         return t
 
     def runWork(self, minion):
-        t = self.local.cmd(minion, 'win_task.run', ['scheduled-work'])
+        t = self.local.cmd(minion, 'task.run', ['scheduled-work'])
         return t
 
 
@@ -82,14 +83,17 @@ if __name__ == "__main__":
             #task = job['task']
             task = 'test'
 
-            args = ('\\\\{0} -acceptula -nobanner -u {1}\TS -p {2} -h -i 1 python.exe C:\\temp\\{3}').format(node, unode, pil['userpass'], jobscript[task] )
-            print(args)
+            args = ('\\\\{0} -accepteula -nobanner -u {1}\TS -p {2} -h -i 1 C:\\salt\\bin\\python.exe C:\\temp\\{3}').format(unode, unode, pil['userpass'], jobscript[task] )
 
             ret = jf.scheduleWork(node, args, pil['userpass'])
-            if ret is not True:
-                print("Failed to schedule work")
+            if ret[node] is not True:
+                print("Failed to schedule work...")
                 exit()
 
-            jf.runWork(node)
+            ret = jf.runWork(node)
+            if ret[node] is not True:
+                print("Failed to run work...")
+                exit()
+
 
 

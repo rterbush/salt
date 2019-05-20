@@ -40,9 +40,9 @@ def run_notepad():
     app.SaveAs.EncodingComboBox.select("UTF-8")
     app.SaveAs.Edit.set_edit_text("example-utf8.txt")
     app.SaveAs.Save.click()
-    app.ConfirmSaveAs.Yes.wait('exists').click()
+    app.ConfirmSaveAs.Yes.wait('enabled').click()
 
-    time.sleep(20)
+    time.sleep(10)
 
     # exit notepad
     app.Notepad.menu_select("File->Exit")
