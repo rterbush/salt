@@ -2,7 +2,7 @@
 {% set dbconf = salt['pillar.get']('systembuilder_conf') -%}
 {%- load_yaml as bits %}
 destdir: {{ grinder.destdir }}
-filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
+filesdir: '{{ pillar['sharedrive'] }}:/{{ pillar['datadir'] }}'
 {%- endload %}
 
 {{ bits.destdir }}:
@@ -14,6 +14,39 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
 {{ bits.destdir }}/bin/__init__.py:
   file.managed:
     - source: salt://{{ slspath }}/files/__init__.py
+    - user: root
+    - group: root
+    - mode: 640
+    - makedirs: True
+    - dir_mode: 750
+    - create: True
+    - replace: True
+
+{{ bits.destdir }}/bin/model.py:
+  file.managed:
+    - source: salt://{{ slspath }}/files/model.py
+    - user: root
+    - group: root
+    - mode: 640
+    - makedirs: True
+    - dir_mode: 750
+    - create: True
+    - replace: True
+
+{{ bits.destdir }}/bin/database.py:
+  file.managed:
+    - source: salt://{{ slspath }}/files/database.py
+    - user: root
+    - group: root
+    - mode: 640
+    - makedirs: True
+    - dir_mode: 750
+    - create: True
+    - replace: True
+
+{{ bits.destdir }}/bin/logging.yaml:
+  file.managed:
+    - source: salt://{{ slspath }}/files/logging.yaml
     - user: root
     - group: root
     - mode: 640
