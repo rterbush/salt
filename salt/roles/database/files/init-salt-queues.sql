@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS salt;
-CREATE DATABASE salt WITH ENCODING 'utf-8' WITH OWNER salt;
+CREATE DATABASE salt WITH ENCODING 'utf-8' OWNER salt;
 GRANT ALL PRIVILEGES ON DATABASE salt TO salt;
 \connect salt;
 CREATE SCHEMA IF NOT EXISTS salt AUTHORIZATION salt;
@@ -64,3 +64,10 @@ CREATE INDEX idx_salt_events_tag on
     salt_events (tag);
 CREATE INDEX idx_salt_events_data ON salt_events
     USING gin (data) with (fastupdate=on);
+
+GRANT ALL PRIVILEGES ON TABLE jids TO salt;
+GRANT ALL PRIVILEGES ON TABLE salt TO salt;
+GRANT ALL PRIVILEGES ON TABLE salt_events TO salt;
+GRANT ALL PRIVILEGES ON TABLE salt_returns TO salt:
+GRANT ALL PRIVILEGES ON SEQUENCE salt_id_seq TO salt;
+GRANT ALL PRIVILEGES ON SEQUENCE seq_salt_events_id TO salt;
