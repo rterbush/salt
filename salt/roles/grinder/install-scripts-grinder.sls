@@ -85,3 +85,14 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - defaults:
         workingdir: {{ bits.destdir }}/bin
         sbindir: {{ bits.destdir }}/sbin
+
+/etc/profile.d/grinder.sh:
+  file.managed:
+    - source: salt://{{ slspath }}/files/grinder.sh.j2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - replace: True
+    - defaults:
+        destdir: {{ bits.destdir }}
