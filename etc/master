@@ -131,7 +131,8 @@ timeout: 60
 # a burden on the master for larger deployments (over 5000 minions).
 # Disabling the job cache will make previously executed jobs unavailable to
 # the jobs system and is not generally recommended.
-#job_cache: True
+job_cache: True
+master_job_cache: pgjsonb
 
 # Cache minion grains, pillar and mine data via the cache subsystem in the
 # cachedir or a database.
