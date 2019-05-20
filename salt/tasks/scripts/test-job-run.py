@@ -7,7 +7,6 @@ import os.path
 import sys
 import time
 
-import salt.client
 import salt.config
 import salt.loader
 
@@ -52,13 +51,12 @@ if __name__ == "__main__":
     run_notepad()
 
     __caller__  = salt.client.Caller()
-    __opts__    = salt.config.minion_config()
+    __opts__    = salt.config.minion_config('C:/salt/conf/minion')
     __grains__  = salt.loader.grains(__opts__)
 
-    event_complete   = ('systembuilder/task/{0}/completed').format(__grains__['id'])
+    estr   = ('systembuilder/task/{0}/completed').format(__grains__['id'])
 
-    ret = __caller__.cmd('event.send',
-                        event_complete,
+    ret = __caller__.cmd('event.send', estr,
                         { 'completed': True,
                         'message': "System Builder job completed"})
 
