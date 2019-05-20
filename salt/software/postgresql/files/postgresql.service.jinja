@@ -1,5 +1,5 @@
 {% set dbconf = salt['pillar.get']('postgresql_conf') -%}
-.include /lib/systemd/system/postgresql-9.4.service
+.include /lib/systemd/system/postgresql-{{- dbconf.version -}}.service
 
 [Service]
 Environment=PGDATA={{ dbconf.homedir }}/data
