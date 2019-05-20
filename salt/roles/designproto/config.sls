@@ -16,6 +16,13 @@ set_winlogon_autoadminlogon:
     - vtype: REG_SZ
     - vdata: '1'
 
+set_winlogon_forceautologon:
+  reg.present:
+    - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
+    - vname: ForceAutoLogon
+    - vtype: REG_SZ
+    - vdata: '1'
+
 set_winlogon_defaultdomainname:
   reg.present:
     - name: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
