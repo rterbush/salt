@@ -1,8 +1,5 @@
-ipdb
-logging
 pandas==0.24.2
 SQLAlchemy==1.3.3
-psycopg2==2.8.2
 PyYAML==5.1
 ipython==7.4.0
 lxml==4.3.3
