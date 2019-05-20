@@ -1,5 +1,7 @@
+{% set grinder = salt['pillar.get']('grinder') -%}
+{% set dbconf = salt['pillar.get']('systembuilder_conf') -%}
 {%- load_yaml as bits %}
-destdir: {{ pillar['grinder:destdir'] }}
+destdir: {{ grinder.destdir }}
 filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
 {%- endload %}
 
@@ -55,11 +57,11 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - create: True
     - replace: True
     - defaults:
-        dbuser: {{ pillar['systembuilder_conf:dbuser'] }}
-        dbpass: {{ pillar['systembuilder_conf:dbpass'] }}
-        dbhost: {{ pillar['systembuilder_conf:dbhost'] }}
-        dbport: {{ pillar['systembuilder_conf:dbport'] }}
-        database: {{ pillar['systembuilder_conf:dbname'] }}
+        dbuser: {{ dbconf.dbuser }}
+        dbpass: {{ dbconf.dbpass }}
+        dbhost: {{ dbconf.dbhost }}
+        dbport: {{ dbconf.dbport }}
+        database: {{ dbconf.dbname }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
         tsprog: {{ pillar['tsprogram'] }}
