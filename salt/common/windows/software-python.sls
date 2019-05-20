@@ -1,6 +1,6 @@
-pip_install_required:
+pip_install_windows_required:
   pip.installed:
-    - requirements: salt://common/windows/files/python-requirements.txt
+    - requirements: salt://{{ slspath }}/files/python-requirements.txt
     - force_reinstall: True
     - reload_modules: True
 
