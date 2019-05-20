@@ -9,6 +9,7 @@ import time
 
 import salt.config
 import salt.loader
+import salt.client
 
 try:
     from pywinauto import application
@@ -41,11 +42,11 @@ def run_notepad():
     app.SaveAs.Edit.set_edit_text("example-utf8.txt")
     app.SaveAs.Save.click()
     app.ConfirmSaveAs.Yes.wait('enabled').click()
-
     time.sleep(10)
 
     # exit notepad
     app.Notepad.menu_select("File->Exit")
+
 
 if __name__ == "__main__":
     run_notepad()
