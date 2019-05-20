@@ -8,3 +8,4 @@ etc/pki
 etc/.ssh/*.pem
 etc/.ssh/*.pub
 etc/ssh/salt-provisioning
+config.py
