@@ -17,6 +17,8 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - user: root
     - group: root
     - mode: 640
+    - makedirs: True
+    - dir_mode: 750
     - create: True
     - replace: True
 
@@ -26,6 +28,8 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - user: root
     - group: root
     - mode: 750
+    - makedirs: True
+    - dir_mode: 750
     - create: True
     - replace: True
 
@@ -35,6 +39,8 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - user: root
     - group: root
     - mode: 750
+    - makedirs: True
+    - dir_mode: 750
     - create: True
     - replace: True
 
@@ -44,6 +50,8 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - user: root
     - group: root
     - mode: 750
+    - makedirs: True
+    - dir_mode: 750
     - create: True
     - replace: True
 
@@ -54,6 +62,8 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - user: root
     - group: root
     - mode: 640
+    - makedirs: True
+    - dir_mode: 750
     - create: True
     - replace: True
     - defaults:
@@ -73,6 +83,8 @@ filesdir: {{ pillar['sharedrive'] }}/{{ pillar['datadir'] }}
     - user: root
     - group: root
     - mode: 750
+    - makedirs: True
+    - dir_mode: 750
     - create: True
     - replace: True
 
