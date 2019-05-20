@@ -34,16 +34,6 @@ def run_notepad():
 
     app.start(r"notepad.exe")
 
-    # type some text - note that extended characters ARE allowed
-    app.Notepad.Edit.set_edit_text("I am typing s\xe4me text to Notepad\r\n\r\n"
-        "And then I am going to quit")
-
-    # Try and save
-    app.Notepad.menu_select("File->SaveAs")
-    app.SaveAs.EncodingComboBox.select("UTF-8")
-    app.SaveAs.Edit.set_edit_text("example-utf8.txt")
-    app.SaveAs.Save.click()
-    app.ConfirmSaveAs.Yes.wait('enabled').click()
     time.sleep(10)
 
     # exit notepad
