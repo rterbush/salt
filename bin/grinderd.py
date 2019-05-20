@@ -91,7 +91,7 @@ if __name__ == "__main__":
                 args = ('\\\\{0} -accepteula -nobanner -u {1}\TS -p {2} -h -i 1 C:\\salt\\bin\\python.exe C:\\temp\\{3}').format(unode, unode, pil['userpass'], jobscript[task] )
 
                 # distribute work
-                print("%s-sending work to %s..." % time.strftime('%Y-%m-%d|%H:%M:%S'), node)
+                print("%s-sending work to %s..." % (time.strftime('%Y-%m-%d|%H:%M:%S'), node))
                 ret = jf.scheduleWork(node, args, pil['userpass'])
                 if ret[node] is not True:
                     print("Failed to schedule work...")
