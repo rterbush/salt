@@ -11,6 +11,12 @@ filesdir: '{{ pillar['sharedrive'] }}:/{{ pillar['datadir'] }}'
     - group: root
     - dir_mode: 750
 
+/var/log/grinder:
+  file.directory:
+    - user: root
+    - group: root
+    - dir_mode: 750
+
 {{ bits.destdir }}/bin/__init__.py:
   file.managed:
     - source: salt://{{ slspath }}/files/__init__.py
