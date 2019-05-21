@@ -14,6 +14,9 @@ from model import Symbol, DataSeries, Prototype, Session
 
 from time import sleep
 
+import salt.config
+import salt.runner
+
 try:
     from config import DB_URI, TS, BOS_WORKING_DIR, setup_logging, WFA_CONST
 except ModuleNotFoundError as error:
@@ -201,6 +204,10 @@ def add_settings(proto, settings):
     mbb = etree.SubElement(general_options, "MaxBarsBack")
     mbb.text = str(proto.max_bars_back)
 
+def queue_insert(name):
+    j = _runner_.cmd('queue.insert', ['winjob', name], print_event=False)
+    return j
+
 
 if __name__ == "__main__":
     setup_logging()
@@ -209,6 +216,9 @@ if __name__ == "__main__":
     engine = init_engine(DB_URI)
     if engine is not None:
         logger.info("Connected to Postgres database.")
+
+    _opts_ = salt.config.master_config('/etc/salt/master')
+    _runner_ = salt.runner.RunnerClient(_opts_)
 
     while True:
         try:
@@ -252,6 +262,9 @@ if __name__ == "__main__":
             p.status = 'code'
             p.status_state = 'done'
             db_session.commit()
+
+            queue_insert(filename)
+            logger.info("Prototype job queued: {}").format(filename)
 
         except:
             p.status = 'new'
