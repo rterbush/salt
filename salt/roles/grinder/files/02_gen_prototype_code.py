@@ -210,6 +210,8 @@ def queue_insert(name):
 
 
 if __name__ == "__main__":
+    setup_filestore()
+
     setup_logging()
     logger = logging.getLogger(path.basename(__file__))
 
