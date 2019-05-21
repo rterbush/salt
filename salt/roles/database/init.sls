@@ -1,3 +1,5 @@
 include:
   - software.postgresql
-  - {{ slspath }}.initializedb
+  - {{ slspath }}.config
+  - {{ slspath }}.initializedb-returners
+  - {{ slspath }}.initializedb-queues

@@ -30,7 +30,7 @@ create_db_systembuilder:
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
 
-create_db_salt_queues:
+create_db_salt_user:
   postgres_user.present:
     - name: salt
     - encrypted: True
@@ -41,31 +41,3 @@ create_db_salt_queues:
     - db_password: {{ dbconf.owner_pass }}
     - db_host: {{ dbconf.dbhost }}
     - db_port: {{ dbconf.dbport }}
-
-copy_db_init_sql_queues:
-  file.managed:
-    - name: /var/tmp/init-salt-queues.sql
-    - source: salt://{{ slspath }}/files/init-salt-queues.sql
-
-apply_db_init_sql_queues:
-  cmd.run:
-    - name: '
-          PGPASSWORD={{ dbconf.owner_pass }} psql -h {{ dbconf.dbhost }} -U {{ dbconf.owner }} -f /var/tmp/init-salt-queues.sql'
-
-remove_db_init_sql_queues:
-  file.absent:
-    - name: /var/tmp/init-salt-queues.sql
-
-copy_db_init_sql_returners:
-  file.managed:
-    - name: /var/tmp/init-salt-returners.sql
-    - source: salt://{{ slspath }}/files/init-salt-returners.sql
-
-apply_db_init_sql_returners:
-  cmd.run:
-    - name: '
-          PGPASSWORD={{ dbconf.owner_pass }} psql -h {{ dbconf.dbhost }} -U {{ dbconf.owner }} -f /var/tmp/init-salt-returners.sql'
-
-remove_db_init_sql_returners:
-  file.absent:
-    - name: /var/tmp/init-salt-returners.sql
