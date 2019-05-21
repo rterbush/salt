@@ -113,7 +113,7 @@ def get_symbol(ticker):
     """
     Retrieves the symbol from the database if it exists.
     """
-    s = db_session.query(Symbol) \
+    s = db_session.query(Symbol.ticker) \
         .filter_by(ticker = ticker) \
         .one()
     if not s:
@@ -128,7 +128,7 @@ def get_data_series(name, block):
     """
     Retrieves the data series from the database if it exists.
     """
-    ds = db_session.query(DataSeries) \
+    ds = db_session.query(DataSeries.name) \
         .filter_by(name=name, block=block) \
         .one()
     if not ds:
@@ -143,7 +143,7 @@ def get_session(name):
     """
     Retrieves the session from the database if it exists.
     """
-    s = db_session.query(Session) \
+    s = db_session.query(Session.name) \
         .filter_by(name=name) \
         .one()
     if not s:
@@ -176,8 +176,8 @@ def validate_timeframe(tf, secondary=False):
             exit()
 
 def queue_insert(prototype):
-    j = runner.cmd('queue.insert', ['winjob'], prototype,
-                    backend='pgjsonb', print_event=False)
+    j = runner.cmd('queue.insert', ['winjob', prototype],
+                    {'backend': 'pgjsonb'}, print_event=False)
     return j
 
 
@@ -248,5 +248,5 @@ if __name__ == "__main__":
         queue_insert(p)
         logger.info("Prototype run added")
     except Exception as err:
-        logger.error("Failed to queue prototypee run: {}".format(err))
+        logger.error("Failed to queue prototype run: {}".format(err))
 
