@@ -29,7 +29,7 @@ def get_args():
                         help="Start Date for the data series in YYYY-MM-DD format.")
     parser.add_argument("end_date", type=str,
                         help="End Date for the data series in YYYY-MM-DD format.")
-    parser.add_argument("num_blocks", type=int, default=10,
+    parser.add_argument("num_blocks", nargs='?', type=int, default=10,
                         help="Number of blocks to divide the data series into. Default is 10")
     if len(sys.argv) == 1:
         parser.print_help()
