@@ -12,9 +12,6 @@ from database import init_engine, init_db, db_session
 from model import Symbol, DataSeries, Prototype, Session
 from sqlalchemy.exc import IntegrityError
 
-import salt.config
-import salt.runner
-
 try:
     from config import DB_URI, TS, setup_logging
 except ModuleNotFoundError as error:
@@ -113,7 +110,7 @@ def get_symbol(ticker):
     """
     Retrieves the symbol from the database if it exists.
     """
-    s = db_session.query(Symbol.ticker) \
+    s = db_session.query(Symbol) \
         .filter_by(ticker = ticker) \
         .one()
     if not s:
@@ -128,7 +125,7 @@ def get_data_series(name, block):
     """
     Retrieves the data series from the database if it exists.
     """
-    ds = db_session.query(DataSeries.name) \
+    ds = db_session.query(DataSeries) \
         .filter_by(name=name, block=block) \
         .one()
     if not ds:
@@ -143,7 +140,7 @@ def get_session(name):
     """
     Retrieves the session from the database if it exists.
     """
-    s = db_session.query(Session.name) \
+    s = db_session.query(Session) \
         .filter_by(name=name) \
         .one()
     if not s:
@@ -175,23 +172,12 @@ def validate_timeframe(tf, secondary=False):
             logger.error('Timeframe2 not valid. Should be one of {}'.format(valid_secondary))
             exit()
 
-def queue_insert(prototype):
-    j = runner.cmd('queue.insert', ['winjob', prototype],
-                    {'backend': 'pgjsonb'}, print_event=False)
-    return j
-
-
 if __name__ == "__main__":
     setup_logging()
     logger = logging.getLogger(path.basename(__file__))
 
     args = get_args()
     logger.debug(args)
-
-    _opts = salt.config.master_config('/etc/salt/master')
-    runner = salt.runner.RunnerClient(_opts)
-    if runner is not None:
-        logger.info("Connected to Salt Queue")
 
     engine = init_engine(DB_URI)
     init_db()
@@ -213,40 +199,40 @@ if __name__ == "__main__":
     day_swing = 0 if category == 'BO' else 1
     use_genetic = False if args.exhaustive else True
 
-    p = {
-        "prototype": {
-            "category": category,
-            "symbol": symbol,
-            "session": session,
-            "data_series": data_series,
-            "timeframe1": tf1,
-            "timeframe2": tf2,
-            "bos_smart_code": args.bos_smart_code,
-            "max_bars_back": max_bars,
-            "l_s_b": args.l_s_b,
-            "trades_per_day": args.trades_per_day,
-            "daytrading_swing": day_swing,
-            "poi_switch": args.poi,
-            "poi_n1": args.poi_n1,
-            "natr": args.natr,
-            "fract": args.fract,
-            "filter1_switch": args.filter1,
-            "filter1_n1": args.filter1_n1,
-            "filter1_n2": args.filter1_n2,
-            "filter2_switch": args.filter2,
-            "filter2_n1": args.filter2_n1,
-            "filter2_n2": args.filter2_n2,
-            "tsegment": args.tsegment,
-            "stop_loss": args.stop_loss,
-            "profit_target": args.profit_target,
-            "fitness_func": args.fitness,
-            "use_genetic_opt": use_genetic
-        }
-    }
-
+    p = Prototype(
+        category=category,
+        symbol=symbol,
+        session=session,
+        data_series=data_series,
+        timeframe1=tf1,
+        timeframe2=tf2,
+        bos_smart_code=args.bos_smart_code,
+        max_bars_back=max_bars,
+        l_s_b=args.l_s_b,
+        trades_per_day=args.trades_per_day,
+        daytrading_swing=day_swing,
+        poi_switch=args.poi,
+        poi_n1=args.poi_n1,
+        natr=args.natr,
+        fract=args.fract,
+        filter1_switch=args.filter1,
+        filter1_n1=args.filter1_n1,
+        filter1_n2=args.filter1_n2,
+        filter2_switch=args.filter2,
+        filter2_n1=args.filter2_n1,
+        filter2_n2=args.filter2_n2,
+        tsegment=args.tsegment,
+        stop_loss=args.stop_loss,
+        profit_target=args.profit_target,
+        fitness_func=args.fitness,
+        use_genetic_opt=use_genetic
+    )
     try:
-        queue_insert(p)
-        logger.info("Prototype run added")
-    except Exception as err:
-        logger.error("Failed to queue prototype run: {}".format(err))
-
+        db_session.add(p)
+        db_session.flush()
+    except IntegrityError:
+        db_session.rollback()
+        logger.error("Prototype already exits {}".format(p))
+    else:
+        db_session.commit()
+        logger.info("Prototype added {}".format(p))
