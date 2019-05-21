@@ -25,6 +25,7 @@ if not path.exists(path.join(BOS_WORKING_DIR, "IS")):
 if not path.exists(path.join(BOS_WORKING_DIR, "OOS")):
     makedirs(path.join(BOS_WORKING_DIR, "OOS"))
 
+LOG_DIR = '/var/log/grinder'
 
 def setup_logging(
     config_file='logging.yaml', default_level=logging.INFO
