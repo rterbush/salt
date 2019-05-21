@@ -2,7 +2,7 @@
 {% set dbconf = salt['pillar.get']('systembuilder_conf') -%}
 {%- load_yaml as bits %}
 destdir: {{ grinder.destdir }}
-filesdir: '{{ pillar['sharedrive'] }}:/{{ pillar['datadir'] }}'
+filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
 {%- endload %}
 
 {{ bits.destdir }}:
