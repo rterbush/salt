@@ -568,7 +568,7 @@ class SaltEvent(object):
                 if not self.cpub and not self.connect_pub(timeout=wait):
                     break
 
-                raw = self.subscriber._read(timeout=wait, no_log=True)
+                raw = self.subscriber._read(timeout=wait)
                 if raw is None:
                     break
                 mtag, data = self.unpack(raw, self.serial)
@@ -694,7 +694,7 @@ class SaltEvent(object):
             if not self.connect_pub():
                 return None
         log.debug("get_event_noblock IPCSubscriber read")
-        raw = self.subscriber._read(timeout=0, no_log=True)
+        raw = self.subscriber._read(timeout=0)
         if raw is None:
             return None
         mtag, data = self.unpack(raw, self.serial)
@@ -711,7 +711,7 @@ class SaltEvent(object):
             if not self.connect_pub():
                 return None
         log.debug("get_event_block IPCSubscriber read")
-        raw = self.subscriber._read(timeout=None, no_log=True)
+        raw = self.subscriber._read(timeout=None)
         if raw is None:
             return None
         mtag, data = self.unpack(raw, self.serial)
