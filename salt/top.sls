@@ -2,8 +2,8 @@
 base:
   '*':
     - common
-  'wnode[1-3].*':
-    - roles.designproto
+  'wnode*':
+    - roles.winworker
   'hedge.*':
     - roles.database
     - roles.grinder

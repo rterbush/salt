@@ -1,0 +1,48 @@
+#
+# config.py.template
+#
+import logging.config
+import yaml
+
+from os import path, makedirs
+from socket import gethostname
+
+DB_URI = "postgresql+psycopg2://{{ dbuser }}:{{ dbpass }}@{{ dbhost }}:{{ dbport }}/{{ database }}"
+
+TS = {
+    "username": "{{ tsuser }}",
+    "password": "{{ tspass }}",
+    "program": "{{ tsprog }}",
+}
+
+BOS_WORKING_DIR = "{{ filesdir }}"
+def setup_filestore():
+    if not path.exists(path.join(BOS_WORKING_DIR, "DP_XML")):
+        makedirs(path.join(BOS_WORKING_DIR, "DP_XML"))
+    if not path.exists(path.join(BOS_WORKING_DIR, "TEMPLATES")):
+        makedirs(path.join(BOS_WORKING_DIR, "TEMPLATES"))
+    if not path.exists(path.join(BOS_WORKING_DIR, "IS")):
+        makedirs(path.join(BOS_WORKING_DIR, "IS"))
+    if not path.exists(path.join(BOS_WORKING_DIR, "OOS")):
+        makedirs(path.join(BOS_WORKING_DIR, "OOS"))
+
+LOG_DIR = '/var/log/grinder'
+def setup_logging(
+    config_file='logging.yaml', default_level=logging.INFO
+):
+    if path.exists(config_file):
+        with open(config_file, 'rt') as f:
+            config = yaml.safe_load(f.read().format(path=LOG_DIR))
+        logging.config.dictConfig(config)
+    else:
+        logging.basicConfig(level=default_level)
+
+WFA_CONST = {
+    'Generations': 25,
+    'PopulationSize': 500,
+    'CrossOverRate': 0.05,
+    'MutationRate': 0.90,
+    'ExcludeFirst': 0,
+    'ExcludeLast': 20,
+    'KeepTests': 8000,
+}
