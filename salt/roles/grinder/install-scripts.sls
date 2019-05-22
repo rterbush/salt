@@ -52,6 +52,17 @@ scriptdir: {{ pillar['scriptdir'] }}
     - create: True
     - replace: True
 
+{{ vars.destdir }}/bin/exceptions.py:
+  file.managed:
+    - source: salt://{{ slspath }}/files/exceptions.py
+    - user: root
+    - group: root
+    - mode: 640
+    - makedirs: True
+    - dir_mode: 750
+    - create: True
+    - replace: True
+
 {{ vars.destdir }}/bin/logging.yaml:
   file.managed:
     - source: salt://{{ slspath }}/files/logging.yaml
