@@ -24,6 +24,10 @@ except ModuleNotFoundError as error:
     exit()
 
 
+class AllOtherErrors(Exception):
+    pass
+
+
 def add_securities(proto, securities):
     """
     """
@@ -268,7 +272,10 @@ if __name__ == "__main__":
             queue_insert(filename)
             logger.info("Prototype job queued: {}".format(filename))
 
-        except:
+        except KeyboardInterrupt:
+            # catch keyboard interrupt
+            pass
+        except AllOtherErrors as err:
             p.status = 'new'
             p.status_state = 'new'
             db_session.commit()
