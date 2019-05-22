@@ -1,7 +1,7 @@
 {% set dbconf = salt['pillar.get']('systembuilder_conf') -%}
 {%- load_yaml as vars %}
 destdir: {{ pillar['scriptdir'] }}
-sharedir: '{{ pillar['sharedrive'] }}\{{ pillar['sharefolder'] }}'
+sharedir: '{{ pillar['sharedrive'] }}:\{{ pillar['sharefolder'] }}'
 tsuser: {{ pillar['tsusername'] }}
 tspass: {{ pillar['tspassword'] }}
 tsprog: {{ pillar['tsprogram'] }}
@@ -36,7 +36,7 @@ tsprog: {{ pillar['tsprogram'] }}
     - create: True
     - replace: True
 
-{{ vars.destdir }}/bin/config.py:
+{{ vars.destdir }}/config.py:
   file.managed:
     - source: salt://{{ slspath }}/files/config.py.j2
     - template: jinja
