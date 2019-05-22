@@ -89,8 +89,7 @@ if __name__ == "__main__":
 
                 # request job parameters
                 job = jf.jobPop()
-                import ipdb; ipdb.set_trace()
-                jobid = re.split('^(\w+)-.*$', job)[1]
+                jobid = re.split('^(\w+)-.*$', job[0])[1]
                 task = jobid[:2]
 
                 # get pillar data for work node

@@ -89,7 +89,7 @@ scriptdir: {{ pillar['scriptdir'] }}
       smartcode: {{ vars.smartcode }}
 
 
-{{ vars.destdir }}/sbin/gen_prototype_code.py:
+{{ vars.destdir }}/bin/gen_prototype_code.py:
   file.managed:
     - source: salt://{{ slspath }}/files/02_gen_prototype_code.py
     - user: root
@@ -119,7 +119,7 @@ scriptdir: {{ pillar['scriptdir'] }}
         database: {{ dbconf.dbname }}
         sharedir: {{ vars.sharedir }}
 
-{{ vars.destdir }}/sbin/grinderd.py:
+{{ vars.destdir }}/bin/grinderd.py:
   file.managed:
     - source: salt://{{ slspath }}/files/grinderd.py
     - template: jinja
@@ -143,7 +143,7 @@ scriptdir: {{ pillar['scriptdir'] }}
     - replace: True
     - defaults:
         workingdir: {{ vars.destdir }}/bin
-        sbindir: {{ vars.destdir }}/sbin
+        sbindir: {{ vars.destdir }}/bin
 
 /lib/systemd/system/genprotod.service:
   file.managed:
@@ -155,7 +155,7 @@ scriptdir: {{ pillar['scriptdir'] }}
     - replace: True
     - defaults:
         workingdir: {{ vars.destdir }}/bin
-        sbindir: {{ vars.destdir }}/sbin
+        sbindir: {{ vars.destdir }}/bin
 
 /etc/profile.d/grinder.sh:
   file.managed:
