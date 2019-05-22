@@ -13,7 +13,7 @@ from model import Symbol, DataSeries, Prototype, Session
 from sqlalchemy.exc import IntegrityError
 
 try:
-    from config import DB_URI, TS, setup_logging
+    from config import DB_URI, setup_logging
 except ModuleNotFoundError as error:
     print("Create config.py file by renaming the config.py.template file and edit settings")
     exit()

@@ -18,7 +18,7 @@ import salt.config
 import salt.runner
 
 try:
-    from config import DB_URI, TS, BOS_WORKING_DIR, setup_filestore, setup_logging, WFA_CONST
+    from config import DB_URI, BOS_WORKING_DIR, setup_filestore, setup_logging, WFA_CONST
 except ModuleNotFoundError as error:
     print("Create config.py file by renaming the config.py.template file and edit settings")
     exit()

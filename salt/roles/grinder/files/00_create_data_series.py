@@ -9,7 +9,7 @@ from database import init_engine, init_db, db_session
 from model import DataSeries
 
 try:
-    from config import DB_URI, TS, setup_logging
+    from config import DB_URI, setup_logging
 except ModuleNotFoundError as error:
     print("Create config.py file by renaming the config.py.template file and edit settings")
     exit()
