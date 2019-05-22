@@ -36,8 +36,8 @@ def get_args():
                         help="Name of the data series used to determine block.")
     parser.add_argument("block", type=int,
                         help="Block number to run prototype on. Usually 1 to 10 but depends on the data series.")
-    parser.add_argument("-b", "--bos_smart_code", type=str, default='BOS-SMART-CODE-1.8.1',
-                        help="BOS Smart Code Version to use. Default BOS-SMART-CODE-1.8.1")
+    parser.add_argument("-b", "--bos_smart_code", type=str, default='{{ smartcode }}',
+                        help="BOS Smart Code Version to use. Default {{ smartcode }}")
     parser.add_argument("-m", "--max_bars_back", type=int, default=200,
                         help="Number of bars the strategy will reference in the code. Default 200")
     parser.add_argument("-sw", "--swing", action="store_true",

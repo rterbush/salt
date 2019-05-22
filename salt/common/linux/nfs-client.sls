@@ -1,6 +1,6 @@
-mount_nfs_volume_windows:
+mount_nfs_volume_salt:
   mount.mounted:
-    - name: {{ pillar['nfs_mount_point_windows'] }}
+    - name: {{ pillar['nfs_mount_point_salt'] }}
     - device: '{{ pillar['nfs_server'] }}:/{{ pillar['nfs_share'] }}'
     - fstype: nfs
     - opts: rw,bg,soft,defaults

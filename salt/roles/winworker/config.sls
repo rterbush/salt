@@ -54,7 +54,7 @@ set_token_filter_policy:
 TS:
   user.present:
     - fullname: TradeStation User
-    - password: {{pillar['userpass']}}
+    - password: {{ pillar['userpass'] }}
     - groups:
       - Users
       - Power Users

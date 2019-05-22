@@ -1,17 +1,18 @@
-{%- load_yaml as bits %}
-destdir: C:\\temp
+{%- load_yaml as vars %}
+destdir: {{ pillar['scriptdir'] }}
 srcdir: 'salt://roles/designproto/files'
 uppernode: {{ grains['id'].split('.') | first | upper }}
+smartcode: {{ pillar['smartcode'] }}
 {%- endload %}
 
 upload_config_script:
   file.managed:
-    - name: {{ bits.destdir }}/auto-configure-tradestation.py
+    - name: {{ vars.destdir }}/auto-configure-tradestation.py
     - source: salt://{{ slspath }}/files/auto-configure-tradestation.py
     - template: jinja
     - makedirs: True
     - defaults:
-        destdir: {{ bits.destdir }}
+        destdir: {{ vars.destdir }}
         tsuser: {{ pillar['tsusername'] }}
         tspass: {{ pillar['tspassword'] }}
         tsprog: {{ pillar['tsprogram'] }}
@@ -19,8 +20,8 @@ upload_config_script:
 
 upload_smart_code_framework:
   file.managed:
-    - name: {{ bits.destdir }}\000-BOS-SMART-CODE-V1.9.ELD
-    - source: salt://files/TradeStation/ELD/000-BOS-SMART-CODE-V1.9.ELD
+    - name: {{ vars.destdir }}\{{ vars.smartcode }}.ELD
+    - source: salt://files/TradeStation/ELD/{{ vars.smartcode }}.ELD
     - makedirs: True
 
 create_config_task:
@@ -31,7 +32,7 @@ create_config_task:
       - password: {{ pillar['userpass'] }}
       - action_type: Execute
       - cmd: 'psexec'
-      - arguments: '\\{{ bits.uppernode }} -accepteula -nobanner -u {{ bits.uppernode }}\TS -p {{ pillar['userpass'] }} -h -i 1 C:/salt/bin/python.exe {{ bits.destdir }}/auto-configure-tradestation.py'
+      - arguments: '\\{{ vars.uppernode }} -accepteula -nobanner -u {{ vars.uppernode }}\TS -p {{ pillar['userpass'] }} -h -i 1 C:/salt/bin/python.exe {{ vars.destdir }}/auto-configure-tradestation.py'
       - trigger_enabled: True
       - trigger_type: 'Once'
       - force: True
@@ -51,6 +52,6 @@ run_config_task:
 
 # cleanup_config_script:
 #   file.absent:
-#     - name: {{ bits.destdir }}/auto-configure-tradestation.py
+#     - name: {{ vars.destdir }}/auto-configure-tradestation.py
 #     - require:
 #       - run: run_config_task

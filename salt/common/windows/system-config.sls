@@ -1,5 +1,5 @@
 {% set hostname,domain = grains.id.partition('.')[::2] %}
-{%- load_yaml as bits %}
+{%- load_yaml as vars %}
 nodename: {{ grains.id }}
 uppernode: {{ hostname | upper }}
 {%- endload %}
@@ -7,12 +7,12 @@ uppernode: {{ hostname | upper }}
 set_computer_name:
   module.run:
     - system.set_computer_name:
-      - name: {{ bits.uppernode }}
+      - name: {{ vars.uppernode }}
 
 set_computer_hostname:
   module.run:
     - system.set_hostname:
-      - hostname: {{ bits.nodename }}
+      - hostname: {{ vars.nodename }}
 
 install_windows_updates:
   wua.uptodate:

@@ -1,11 +1,12 @@
 {% set grinder = salt['pillar.get']('grinder') -%}
 {% set dbconf = salt['pillar.get']('systembuilder_conf') -%}
-{%- load_yaml as bits %}
+{%- load_yaml as vars %}
 destdir: {{ grinder.destdir }}
-filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
+sharedir: {{ pillar['nfs_mount_point_unix'] }}/BOS
+smartcode: {{ pillar['smartcode'] }}
 {%- endload %}
 
-{{ bits.destdir }}:
+{{ vars.destdir }}:
   file.directory:
     - user: root
     - group: root
@@ -17,7 +18,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - group: root
     - dir_mode: 750
 
-{{ bits.destdir }}/bin/__init__.py:
+{{ vars.destdir }}/bin/__init__.py:
   file.managed:
     - source: salt://{{ slspath }}/files/__init__.py
     - user: root
@@ -28,7 +29,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/model.py:
+{{ vars.destdir }}/bin/model.py:
   file.managed:
     - source: salt://{{ slspath }}/files/model.py
     - user: root
@@ -39,7 +40,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/database.py:
+{{ vars.destdir }}/bin/database.py:
   file.managed:
     - source: salt://{{ slspath }}/files/database.py
     - user: root
@@ -50,7 +51,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/logging.yaml:
+{{ vars.destdir }}/bin/logging.yaml:
   file.managed:
     - source: salt://{{ slspath }}/files/logging.yaml
     - user: root
@@ -61,7 +62,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/create_data_series.py:
+{{ vars.destdir }}/bin/create_data_series.py:
   file.managed:
     - source: salt://{{ slspath }}/files/00_create_data_series.py
     - user: root
@@ -72,9 +73,10 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/create_prototype.py:
+{{ vars.destdir }}/bin/create_prototype.py:
   file.managed:
     - source: salt://{{ slspath }}/files/01_create_prototype.py
+    - template: jinja
     - user: root
     - group: root
     - mode: 750
@@ -82,8 +84,11 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - dir_mode: 750
     - create: True
     - replace: True
+    - defaults:
+      smartcode: {{ vars.smartcode }}
 
-{{ bits.destdir }}/sbin/gen_prototype_code.py:
+
+{{ vars.destdir }}/sbin/gen_prototype_code.py:
   file.managed:
     - source: salt://{{ slspath }}/files/02_gen_prototype_code.py
     - user: root
@@ -94,7 +99,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/config.py:
+{{ vars.destdir }}/bin/config.py:
   file.managed:
     - source: salt://{{ slspath }}/files/config.py.j2
     - template: jinja
@@ -111,12 +116,9 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
         dbhost: {{ dbconf.dbhost }}
         dbport: {{ dbconf.dbport }}
         database: {{ dbconf.dbname }}
-        tsuser: {{ pillar['tsusername'] }}
-        tspass: {{ pillar['tspassword'] }}
-        tsprog: {{ pillar['tsprogram'] }}
-        filesdir: {{ bits.filesdir }}
+        sharedir: {{ vars.sharedir }}
 
-{{ bits.destdir }}/sbin/grinderd.py:
+{{ vars.destdir }}/sbin/grinderd.py:
   file.managed:
     - source: salt://{{ slspath }}/files/grinderd.py
     - user: root
@@ -136,8 +138,8 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - mode: 644
     - replace: True
     - defaults:
-        workingdir: {{ bits.destdir }}/bin
-        sbindir: {{ bits.destdir }}/sbin
+        workingdir: {{ vars.destdir }}/bin
+        sbindir: {{ vars.destdir }}/sbin
 
 /lib/systemd/system/genprotod.service:
   file.managed:
@@ -148,8 +150,8 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - mode: 644
     - replace: True
     - defaults:
-        workingdir: {{ bits.destdir }}/bin
-        sbindir: {{ bits.destdir }}/sbin
+        workingdir: {{ vars.destdir }}/bin
+        sbindir: {{ vars.destdir }}/sbin
 
 /etc/profile.d/grinder.sh:
   file.managed:
@@ -160,4 +162,4 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - mode: 644
     - replace: True
     - defaults:
-        destdir: {{ bits.destdir }}
+        destdir: {{ vars.destdir }}
