@@ -9,6 +9,8 @@ import time
 import logging
 import re
 
+from exceptions import AllOtherErrors
+
 import salt.config
 import salt.runner
 import salt.client
@@ -112,7 +114,9 @@ if __name__ == "__main__":
             else:
                 time.sleep(10)
 
-        except Exception as err:
+        except KeyboardInterrupt:
+            pass
+        except AllOtherErrors as err:
             logger.error("{0}".format(err))
             sys.exit(1)
 

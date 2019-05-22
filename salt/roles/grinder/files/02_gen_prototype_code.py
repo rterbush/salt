@@ -11,6 +11,7 @@ from dicttoxml import dicttoxml
 from datetime import datetime, date, timedelta
 from database import init_engine, init_db, db_session
 from model import Symbol, DataSeries, Prototype, Session
+from exceptions import AllOtherErrors
 
 from time import sleep
 
@@ -22,10 +23,6 @@ try:
 except ModuleNotFoundError as error:
     print("Create config.py file by renaming the config.py.template file and edit settings")
     exit()
-
-
-class AllOtherErrors(Exception):
-    pass
 
 
 def add_securities(proto, securities):
