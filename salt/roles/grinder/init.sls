@@ -1,3 +1,2 @@
 include:
-  - {{ slspath }}.install-scripts-grinder
-  - {{ slspath }}.install-scripts-nodes
+  - {{ slspath }}.install-scripts
