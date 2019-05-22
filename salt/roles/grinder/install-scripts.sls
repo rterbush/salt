@@ -4,6 +4,7 @@
 destdir: {{ grinder.destdir }}
 sharedir: {{ pillar['nfs_mount_point_unix'] }}/BOS
 smartcode: {{ pillar['smartcode'] }}
+scriptdir: {{ pillar['scriptdir'] }}
 {%- endload %}
 
 {{ vars.destdir }}:
@@ -128,6 +129,8 @@ smartcode: {{ pillar['smartcode'] }}
     - dir_mode: 750
     - create: True
     - replace: True
+    - defaults:
+      - scriptdir: {{ vars.scriptdir }}
 
 /lib/systemd/system/grinderd.service:
   file.managed:

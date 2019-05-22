@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 from __future__ import print_function
 
-import os.path
+from os import path
 import sys
 import time
 import logging
@@ -13,7 +13,15 @@ import salt.config
 import salt.runner
 import salt.client
 
-jobscript = {'test': 'test-job-run.py'}
+jobscript = {
+    'DP': 'run_prototype_opt.py'
+    }
+
+try:
+    from config import setup_logging
+except ModuleNotFoundError as error:
+    print("Create config.py file by renaming the config.py.template file and edit settings")
+    sys.exit(1)
 
 class JobForeman(object):
     def __init__(self):
@@ -35,7 +43,8 @@ class JobForeman(object):
         return n[0]
 
     def jobPop(self):
-        j = self.runner.cmd('queue.pop', ['winjob'], print_event=False)
+        #j = self.runner.cmd('queue.pop', ['winjob'], print_event=False)
+        j = self.runner.cmd('queue.list_items', ['winjob'], print_event=False)
         return j
 
     def workerPillar(self, minion):
@@ -63,10 +72,12 @@ class JobForeman(object):
 
 
 if __name__ == "__main__":
+    setup_logging()
+    logger = logging.getLogger(path.basename(__file__))
 
     jf = JobForeman()
 
-    print("Waiting for workers...")
+    logger.info("Waiting for workers...")
     while True:
         try:
             workerCnt = jf.workerCount()
@@ -78,34 +89,33 @@ if __name__ == "__main__":
 
                 # request job parameters
                 job = jf.jobPop()
+                import ipdb; ipdb.set_trace()
+                jobid = re.split('^(\w+)-.*$', job)[1]
+                task = jobid[:2]
 
                 # get pillar data for work node
                 pil = jf.workerPillar(node)
 
-                # map task to appropriate script name
-                #task = job['task']
-                task = 'test'
-
                 # generate command arguments
-                args = ('\\\\{0} -accepteula -nobanner -u {1}\TS -p {2} -h -i 1 C:\\salt\\bin\\python.exe C:\\temp\\{3}').format(unode, unode, pil['userpass'], jobscript[task] )
+                args = ('\\\\{0} -accepteula -nobanner -u {1}\\TS -p {2} -h -i 1 C:\\salt\\bin\\python.exe {{ scriptdir }}\\{3} {4}').format(unode, unode, pil['userpass'], jobscript[task], jobid )
 
                 # distribute work
-                print("%s-sending work to %s..." % (time.strftime('%Y-%m-%d|%H:%M:%S'), node))
+                logger.info("{0}-sending work to {1}...".format(time.strftime('%Y-%m-%d|%H:%M:%S'), node))
                 ret = jf.scheduleWork(node, args, pil['userpass'])
                 if ret[node] is not True:
-                    print("Failed to schedule work...")
-                    exit()
+                    logger.error("Failed to schedule work...")
+                    sys.exit(1)
 
                 ret = jf.runWork(node)
                 if ret[node] is not True:
-                    print("Failed to run work...")
-                    exit()
+                    logger.error("Failed to run work...")
+                    sys.exit(1)
             else:
                 time.sleep(10)
 
         except Exception as err:
-            print("%s", err)
-            exit(1)
+            logger.error("{0}".format(err))
+            sys.exit(1)
 
 
 

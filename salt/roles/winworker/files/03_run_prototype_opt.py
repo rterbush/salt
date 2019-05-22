@@ -24,7 +24,7 @@ try:
     from config import DB_URI, TS, BOS_WORKING_DIR, setup_logging
 except ModuleNotFoundError as error:
     print("Create config.py file by renaming the config.py.template file and edit settings")
-    exit()
+    sys.exit(1)
 
 
 def launch_tradestation(TS):
