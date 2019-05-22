@@ -266,7 +266,7 @@ if __name__ == "__main__":
             db_session.commit()
 
             queue_insert(filename)
-            logger.info("Prototype job queued: {}").format(filename)
+            logger.info("Prototype job queued: {}".format(filename))
 
         except:
             p.status = 'new'
