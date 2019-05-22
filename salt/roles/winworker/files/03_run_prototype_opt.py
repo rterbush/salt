@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
 #
 # run_prototype_opt.py
 #
+import sys
 import logging
 
 from os import path
@@ -65,16 +65,14 @@ def open_workspace(app, workspace):
     return workspace
 
 
-def get_next_proto(status='new', state='new'):
+def get_proto_params(id):
     """
-    Query next prototype for processing
+    Query prototype ID for processing
     """
     p = db_session.query(Prototype) \
-        .filter_by(status=status, status_state=state) \
-        .order_by(Prototype.id) \
-        .first()
+        .filter_by(id=id)
 
-    logger.info("Querying database for the next {}/{} prototype to process: {}".format(status, state, p))
+    logger.info("Querying database for prototype id: {} to process: {}".format(id, p))
     return p
 
 def register_complete():
@@ -85,6 +83,11 @@ def register_complete():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        logger.error("Prototype optimization requires prototype ID...")
+        sys.exit(1)
+
+    dpid = sys.argv[1]
     __caller__  = salt.client.Caller()
     __opts__    = salt.config.minion_config('C:/salt/conf/minion')
     __grains__  = salt.loader.grains(__opts__)
@@ -100,69 +103,67 @@ if __name__ == "__main__":
 
     workspace = open_workspace(app, "BosOptAuto.tsw")
 
-    while True:
-        try:
-            p = get_next_proto('code', 'done')
-            if p is None:
-                logger.info("No new code/done prototype to be processed. Sleeping...")
-                sleep(60)
-                continue
+    try:
+        p = get_proto_params(dpid)
+        if p is None:
+            logger.info("Scheduled prototype job not found...")
+            sys.exit(1)
 
-            logger.info("Setting status_state to wfa in database.")
-            p.status_state = 'wfa' # wfa status_state. Set back to new on error or error?
-            db_session.commit()
+        logger.info("Setting status_state to wfa in database.")
+        p.status_state = 'wfa' # wfa status_state. Set back to new on error or error?
+        db_session.commit()
 
-            # Format TradingApp
-            logger.info("Format TradingApp and set the input parameters for optimization run.")
-            app.BosOptAuto.set_focus()
-            app.MenuBar.type_keys("%FF{ENTER}{ENTER}")
-            Timings.fast()
-            app["Format TradingApp: BosOptAuto"].wait("visible")
-            app["Format TradingApp: BosOptAuto"].TabControl.select("General")
-            app["Format TradingApp: BosOptAuto"].type_keys("%r{}".format(p.max_bars_back))
-            app["Format TradingApp: BosOptAuto"].TabControl.select("Inputs")
+        # Format TradingApp
+        logger.info("Format TradingApp and set the input parameters for optimization run.")
+        app.BosOptAuto.set_focus()
+        app.MenuBar.type_keys("%FF{ENTER}{ENTER}")
+        Timings.fast()
+        app["Format TradingApp: BosOptAuto"].wait("visible")
+        app["Format TradingApp: BosOptAuto"].TabControl.select("General")
+        app["Format TradingApp: BosOptAuto"].type_keys("%r{}".format(p.max_bars_back))
+        app["Format TradingApp: BosOptAuto"].TabControl.select("Inputs")
 
-            filename = "DP{0:04d}-{1}-{2}".format(p.id, p.symbol.ticker, p.data_series.block)
-            job_file = path.join(BOS_WORKING_DIR, "DP_XML", filename +".xml")
-            is_file = path.join(BOS_WORKING_DIR, "IS", filename + "-IS.txt")
-            oos_file = path.join(BOS_WORKING_DIR, "OOS", filename + "-OOS.txt")
+        filename = "DP{0:04d}-{1}-{2}".format(p.id, p.symbol.ticker, p.data_series.block)
+        job_file = path.join(BOS_WORKING_DIR, "DP_XML", filename +".xml")
+        is_file = path.join(BOS_WORKING_DIR, "IS", filename + "-IS.txt")
+        oos_file = path.join(BOS_WORKING_DIR, "OOS", filename + "-OOS.txt")
 
-            logger.info("Inputs:")
-            logger.info("  JobFile: {}".format(job_file))
-            logger.info("  IsFile : {}".format(is_file))
-            logger.info("  OosFile: {}".format(oos_file))
+        logger.info("Inputs:")
+        logger.info("  JobFile: {}".format(job_file))
+        logger.info("  IsFile : {}".format(is_file))
+        logger.info("  OosFile: {}".format(oos_file))
 
-            app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.set_focus()
-            app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('"{}"'.format(job_file))   # JobFile
-            app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('{DOWN}')
-            app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('"{}"'.format(is_file))    # ResultsIS
-            app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('{DOWN}')
-            app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('"{}"'.format(oos_file))   # ResultsOOS
-            app["Format TradingApp: BosOptAuto"].Ok.click()
-            Timings.slow()
+        app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.set_focus()
+        app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('"{}"'.format(job_file))   # JobFile
+        app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('{DOWN}')
+        app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('"{}"'.format(is_file))    # ResultsIS
+        app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('{DOWN}')
+        app["Format TradingApp: BosOptAuto"].Inputs.PropertyList.type_keys('"{}"'.format(oos_file))   # ResultsOOS
+        app["Format TradingApp: BosOptAuto"].Ok.click()
+        Timings.slow()
 
-            stime = datetime.now()
-            logger.info("Starting optimization...")
-            app.BosOptAuto.StartOptimizatin.click()
+        stime = datetime.now()
+        logger.info("Starting optimization...")
+        app.BosOptAuto.StartOptimizatin.click()
+        status = app.BosOptAuto.Edit.iface_value.CurrentValue
+        sleep(5)
+        while status == 'Running':
             status = app.BosOptAuto.Edit.iface_value.CurrentValue
-            sleep(5)
-            while status == 'Running':
-                status = app.BosOptAuto.Edit.iface_value.CurrentValue
-                logger.info("Optimization status: {}".format(status))
-                sleep(10)
+            logger.info("Optimization status: {}".format(status))
+            sleep(10)
 
-            runtime = datetime.now() - stime
-            logger.info("Optimization completed [{}] in {}.".format(status, runtime))
+        runtime = datetime.now() - stime
+        logger.info("Optimization completed [{}] in {}.".format(status, runtime))
 
-            p.opt_run_time = runtime
-            p.status = 'wfa'
-            p.status_state = 'done'
-            db_session.commit()
-            register_complete()
+        p.opt_run_time = runtime
+        p.status = 'wfa'
+        p.status_state = 'done'
+        db_session.commit()
+        register_complete()
 
-        except:
-            # set status back to code/done
-            p.status = 'code'
-            p.status_state = 'done'
-            db_session.commit()
-            raise
+    except:
+        # set status back to code/done
+        p.status = 'code'
+        p.status_state = 'done'
+        db_session.commit()
+        raise
