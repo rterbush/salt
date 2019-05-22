@@ -122,6 +122,7 @@ scriptdir: {{ pillar['scriptdir'] }}
 {{ vars.destdir }}/sbin/grinderd.py:
   file.managed:
     - source: salt://{{ slspath }}/files/grinderd.py
+    - template: jinja
     - user: root
     - group: root
     - mode: 750
