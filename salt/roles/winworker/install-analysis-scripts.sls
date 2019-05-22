@@ -1,7 +1,7 @@
 {% set dbconf = salt['pillar.get']('systembuilder_conf') -%}
 {%- load_yaml as vars %}
 destdir: {{ pillar['scriptdir'] }}
-sharedir: {{ pillar['nfs_mount_point_unix'] }}/BOS
+sharedir: '{{ pillar['sharedrive'] }}\{{ pillar['sharefolder'] }}'
 tsuser: {{ pillar['tsusername'] }}
 tspass: {{ pillar['tspassword'] }}
 tsprog: {{ pillar['tsprogram'] }}

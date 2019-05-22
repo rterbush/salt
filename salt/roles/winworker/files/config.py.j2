@@ -15,7 +15,7 @@ TS = {
     "program": "{{ tsprog }}",
 }
 
-BOS_WORKING_DIR = "{{ filesdir }}"
+BOS_WORKING_DIR = "{{ sharedir }}"
 def setup_filestore():
     if not path.exists(path.join(BOS_WORKING_DIR, "DP_XML")):
         makedirs(path.join(BOS_WORKING_DIR, "DP_XML"))
