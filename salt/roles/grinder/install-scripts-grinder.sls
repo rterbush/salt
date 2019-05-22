@@ -83,7 +83,7 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
     - create: True
     - replace: True
 
-{{ bits.destdir }}/bin/gen_prototype_code.py:
+{{ bits.destdir }}/sbin/gen_prototype_code.py:
   file.managed:
     - source: salt://{{ slspath }}/files/02_gen_prototype_code.py
     - user: root
@@ -130,6 +130,18 @@ filesdir: {{ pillar['nfs_mount_point_unix'] }}/BOS
 /lib/systemd/system/grinderd.service:
   file.managed:
     - source: salt://{{ slspath }}/files/grinderd.service.j2
+    - template: jinja
+    - user: root
+    - group: root
+    - mode: 644
+    - replace: True
+    - defaults:
+        workingdir: {{ bits.destdir }}/bin
+        sbindir: {{ bits.destdir }}/sbin
+
+/lib/systemd/system/genprotod.service:
+  file.managed:
+    - source: salt://{{ slspath }}/files/genprotod.service.j2
     - template: jinja
     - user: root
     - group: root

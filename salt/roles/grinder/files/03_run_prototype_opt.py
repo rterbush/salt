@@ -13,6 +13,10 @@ from subprocess import Popen
 from pywinauto import Desktop
 from pywinauto.timings import Timings
 
+import salt.config
+import salt.loader
+import salt.client
+
 Timings.slow()
 Timings.window_find_timeout = 90
 
@@ -73,8 +77,18 @@ def get_next_proto(status='new', state='new'):
     logger.info("Querying database for the next {}/{} prototype to process: {}".format(status, state, p))
     return p
 
+def register_complete():
+    estr   = ('systembuilder/task/{0}/completed').format(__grains__['id'])
+    __caller__.cmd('event.send', estr,
+                  { 'completed': True,
+                    'message': "System Builder job completed"})
+
 
 if __name__ == "__main__":
+    __caller__  = salt.client.Caller()
+    __opts__    = salt.config.minion_config('C:/salt/conf/minion')
+    __grains__  = salt.loader.grains(__opts__)
+
     setup_logging()
     logger = logging.getLogger(path.basename(__file__))
 
@@ -144,6 +158,7 @@ if __name__ == "__main__":
             p.status = 'wfa'
             p.status_state = 'done'
             db_session.commit()
+            register_complete()
 
         except:
             # set status back to code/done

@@ -27,7 +27,7 @@ class JobForeman(object):
 
     def jobCount(self):
         n = self.runner.cmd('queue.list_length', ['winjob'],
-        backend='pgjsonb', print_event=False)
+        print_event=False)
         return n
 
     def workerPop(self):
@@ -35,7 +35,7 @@ class JobForeman(object):
         return n[0]
 
     def jobPop(self):
-        j = self.runner.cmd('queue.pop', ['winjob'], backend='pgjsonb', print_event=False)
+        j = self.runner.cmd('queue.pop', ['winjob'], print_event=False)
         return j
 
     def workerPillar(self, minion):
@@ -70,15 +70,14 @@ if __name__ == "__main__":
     while True:
         try:
             workerCnt = jf.workerCount()
-            #jobCnt = jf.jobCount()
+            jobCnt = jf.jobCount()
 
-            jobCnt = 1
             if workerCnt > 0 and jobCnt > 0:
                 node = jf.workerPop()
                 unode = re.split('^(\w+)\..*$', node)[1].upper()
 
                 # request job parameters
-                #job = jf.jobPop()
+                job = jf.jobPop()
 
                 # get pillar data for work node
                 pil = jf.workerPillar(node)
