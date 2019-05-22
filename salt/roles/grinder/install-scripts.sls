@@ -131,7 +131,7 @@ scriptdir: {{ pillar['scriptdir'] }}
     - create: True
     - replace: True
     - defaults:
-      - scriptdir: {{ vars.scriptdir }}
+        scriptdir: {{ vars.scriptdir }}
 
 /lib/systemd/system/grinderd.service:
   file.managed:
